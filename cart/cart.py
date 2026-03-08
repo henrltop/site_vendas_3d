@@ -1,15 +1,56 @@
 from decimal import Decimal
 from catalog.models import Product
 from django.utils import timezone
+from .models import UserCart
 
 class Cart:
     def __init__(self, request):
+        self.request = request
         self.session = request.session
         cart = self.session.get('cart')
         if not cart:
             cart = self.session['cart'] = {}
         self.cart = cart
         self.coupon_id = self.session.get('coupon_id')
+        self.user_cart = None
+
+        if request.user.is_authenticated:
+            self.user_cart, _ = UserCart.objects.get_or_create(user=request.user)
+            self._sync_authenticated_cart()
+
+    def _merge_carts(self, session_cart, db_cart):
+        merged = dict(db_cart or {})
+
+        for item_id, session_item in (session_cart or {}).items():
+            if item_id in merged:
+                merged[item_id]['quantity'] = int(merged[item_id].get('quantity', 0)) + int(session_item.get('quantity', 0))
+            else:
+                merged[item_id] = session_item
+
+        return merged
+
+    def _sync_authenticated_cart(self):
+        merged_user_id = self.session.get('cart_merged_user_id')
+        db_cart = self.user_cart.data or {}
+
+        if merged_user_id != self.request.user.id:
+            final_cart = self._merge_carts(self.cart, db_cart)
+            self.session['cart_merged_user_id'] = self.request.user.id
+        else:
+            final_cart = db_cart
+
+        self.cart = final_cart
+        self.session['cart'] = final_cart
+
+        if self.user_cart.coupon_id:
+            self.coupon_id = self.user_cart.coupon_id
+            self.session['coupon_id'] = self.user_cart.coupon_id
+
+        self.user_cart.data = final_cart
+        self.user_cart.coupon_id = self.coupon_id
+        self.user_cart.save(update_fields=['data', 'coupon_id', 'updated_at'])
+
+        self.session.modified = True
 
     def add(self, product, quantity=1, color=None, custom_fields=None, override_quantity=False):
         # Criar chave única baseada em cores e custom fields para separar variações iguais no carrinho
@@ -51,6 +92,14 @@ class Cart:
             self.save()
 
     def save(self):
+        self.session['cart'] = self.cart
+        self.session['coupon_id'] = self.coupon_id
+
+        if self.request.user.is_authenticated and self.user_cart is not None:
+            self.user_cart.data = self.cart
+            self.user_cart.coupon_id = self.coupon_id
+            self.user_cart.save(update_fields=['data', 'coupon_id', 'updated_at'])
+
         self.session.modified = True
 
     def set_coupon(self, coupon):
@@ -131,5 +180,6 @@ class Cart:
         return result if result > 0 else Decimal('0.00')
 
     def clear(self):
-        del self.session['cart']
+        self.session['cart'] = {}
+        self.cart = {}
         self.save()
