@@ -1,0 +1,11 @@
+{
+    "editor.formatOnSave": true,
+    "[html]": {
+        "editor.defaultFormatter": null,
+        "editor.formatOnSave": false
+    },
+    "[django-html]": {
+        "editor.defaultFormatter": null,
+        "editor.formatOnSave": false
+    }
+}

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Loja 3D{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS (CDN for quick setup/dev) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                            900: '#14532d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Destaque consistente para campos de formulário */
+        input:not([type=radio]):not([type=checkbox]),
+        select,
+        textarea {
+            border-radius: 0.5rem;
+            border: 1px solid #cbd5e1;
+            padding: 0.65rem 0.75rem;
+            width: 100%;
+            background: #fff;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        input:focus:not([type=radio]):not([type=checkbox]),
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(34,197,94,0.2);
+        }
+        textarea { resize: vertical; }
+        .form-label { font-weight: 600; color: #0f172a; font-size: 0.95rem; }
+        .form-help { font-size: 0.8rem; color: #64748b; }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col antialiased">
+    
+    <!-- Navbar -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="{% url 'catalog:home' %}" class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                        <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                        Studio<span class="text-brand-600">3D</span>
+                    </a>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <nav class="hidden md:flex space-x-8">
+                    <a href="{% url 'catalog:product_list' %}" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">Catálogo</a>
+                    {% if user.is_staff %}
+                    <a href="{% url 'custom_admin:dashboard' %}" class="text-slate-600 hover:text-brand-600 font-medium transition-colors">Admin</a>
+                    {% endif %}
+                </nav>
+
+                <!-- Cart & Search -->
+                <div class="flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                    <span class="hidden sm:inline text-sm text-slate-600">Olá, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="text-sm font-medium text-slate-600 hover:text-brand-600">Sair</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="text-sm font-medium text-slate-600 hover:text-brand-600">Entrar</a>
+                    <a href="{% url 'signup' %}" class="text-sm font-medium text-brand-600 hover:text-brand-700">Criar conta</a>
+                    {% endif %}
+
+                    <form action="{% url 'catalog:product_list' %}" method="get" class="hidden sm:flex relative">
+                        <input type="text" name="q" placeholder="Buscar..." class="w-full bg-slate-100 placeholder-slate-400 text-slate-800 text-sm rounded-full pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-transparent focus:bg-white">
+                        <button type="submit" class="absolute right-3 top-2.5 text-slate-400 hover:text-brand-600">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                        </button>
+                    </form>
+
+                    <a href="{% url 'cart:cart_detail' %}" class="relative text-slate-600 hover:text-brand-600 transition-colors p-2">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 0a2 2 0 100 4 2 2 0 000-4z"></path></svg>
+                        {% if cart|length > 0 %}
+                        <span class="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white transform translate-x-1/4 -translate-y-1/4 bg-brand-600 rounded-full">{{ cart.get_total_items }}</span>
+                        {% endif %}
+                    </a>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button class="md:hidden text-slate-600 hover:text-brand-600">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {% if messages %}
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-4 space-y-2">
+        {% for message in messages %}
+        <div class="p-3 rounded-lg border text-sm {% if message.tags == 'error' %}bg-rose-50 border-rose-200 text-rose-700{% elif message.tags == 'success' %}bg-emerald-50 border-emerald-200 text-emerald-700{% else %}bg-slate-50 border-slate-200 text-slate-700{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-200 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <span class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
+                        Studio<span class="text-brand-600">3D</span>
+                    </span>
+                    <p class="text-slate-500 text-sm">
+                        Produção sob demanda com tecnologia de impressão 3D. Peças personalizadas, brindes e decoração.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900 tracking-wider uppercase mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li><a href="{% url 'catalog:home' %}" class="hover:text-brand-600 transition">Início</a></li>
+                        <li><a href="{% url 'catalog:product_list' %}" class="hover:text-brand-600 transition">Todos os Produtos</a></li>
+                        <li><a href="{% url 'cart:cart_detail' %}" class="hover:text-brand-600 transition">Carrinho</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-slate-900 tracking-wider uppercase mb-4">Contato</h3>
+                    <ul class="space-y-2 text-sm text-slate-500">
+                        <li>WhatsApp: {{ WHATSAPP_PHONE|default:"+55 (00) 0000-0000" }}</li>
+                        <li>Envio para todo o Brasil</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-slate-200 text-center text-sm text-slate-400">
+                &copy; {% now "Y" %} Studio3D. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

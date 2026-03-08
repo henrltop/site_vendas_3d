@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - Studio3D{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Finalizar Pedido</h1>
+        <p class="mt-2 text-slate-500">Nosso checkout é super simples: preencha seus dados e nós conversamos pelo
+            WhatsApp!</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <form action="{% url 'orders:checkout' %}" method="post" class="divide-y divide-slate-200">
+            {% csrf_token %}
+
+            <div class="px-6 py-8 sm:p-10">
+                <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    Seus Dados
+                </h2>
+
+                <div class="grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
+                    <div class="sm:col-span-6">
+                        <label for="customer_name" class="block text-sm font-medium text-slate-700">Nome Completo <span
+                                class="text-brand-600">*</span></label>
+                        <div class="mt-1">
+                            <input type="text" name="customer_name" id="customer_name" required
+                                class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-slate-300 rounded-lg py-2.5 px-3">
+                        </div>
+                    </div>
+
+                    <div class="sm:col-span-6">
+                        <label for="city" class="block text-sm font-medium text-slate-700">Cidade e Estado
+                            (Opcional)</label>
+                        <div class="mt-1">
+                            <input type="text" name="city" id="city" placeholder="Ex: São Paulo, SP"
+                                class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-slate-300 rounded-lg py-2.5 px-3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-8 sm:p-10 bg-slate-50">
+                <h2 class="text-lg font-bold text-slate-900 mb-6 flex items-center gap-2">
+                    <svg class="w-6 h-6 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0">
+                        </path>
+                    </svg>
+                    Entrega e Observações
+                </h2>
+
+                <div class="grid grid-cols-1 gap-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700">Forma de Entrega / Retirada</label>
+                        <fieldset class="mt-4 space-y-3">
+                            <legend class="sr-only">Forma de Entrega</legend>
+                            <div class="flex items-start gap-3">
+                                <input id="opt_uber" name="delivery_option" type="radio" value="1 dia útil | Via UBER - Cliente solicita o UBER e deve nos informar pelo Whatsapp | R$ 0,00" checked class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
+                                <label for="opt_uber" class="text-sm text-slate-700">
+                                    <span class="font-semibold">1 dia útil · R$ 0,00</span><br>
+                                    <span class="text-slate-500">Via UBER - Cliente solicita o UBER e deve nos informar pelo Whatsapp</span>
+                                </label>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <input id="opt_pickup" name="delivery_option" type="radio" value="1 dia útil | Retirar pessoalmente | R$ 0,00" class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
+                                <label for="opt_pickup" class="text-sm text-slate-700">
+                                    <span class="font-semibold">1 dia útil · R$ 0,00</span><br>
+                                    <span class="text-slate-500">Retirar pessoalmente</span>
+                                </label>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <input id="opt_sedex" name="delivery_option" type="radio" value="1 dia útil | SEDEX | R$ 12,17" class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
+                                <label for="opt_sedex" class="text-sm text-slate-700">
+                                    <span class="font-semibold">1 dia útil · R$ 12,17</span><br>
+                                    <span class="text-slate-500">SEDEX</span>
+                                </label>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <input id="opt_pac" name="delivery_option" type="radio" value="6 dias úteis | PAC | R$ 21,02" class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
+                                <label for="opt_pac" class="text-sm text-slate-700">
+                                    <span class="font-semibold">6 dias úteis · R$ 21,02</span><br>
+                                    <span class="text-slate-500">PAC</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-slate-700">Observações adicionais para
+                            a produção (Opcional)</label>
+                        <div class="mt-1">
+                            <textarea id="notes" name="notes" rows="3"
+                                class="shadow-sm focus:ring-brand-500 focus:border-brand-500 block w-full sm:text-sm border-slate-300 rounded-lg py-2.5 px-3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="px-6 py-8 sm:p-10 bg-white">
+                <div class="space-y-2 border-b border-slate-200 pb-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-slate-900">Subtotal:</h3>
+                        <p class="text-lg font-semibold text-slate-900">R$ {{ cart.get_total_price }}</p>
+                    </div>
+                    {% if cart.get_discount > 0 %}
+                    <div class="flex items-center justify-between text-rose-600">
+                        <h3 class="text-sm font-semibold">Desconto do cupom</h3>
+                        <p class="text-lg font-semibold">- R$ {{ cart.get_discount }}</p>
+                    </div>
+                    {% endif %}
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-base font-bold text-slate-900">Total Previsto:</h3>
+                        <p class="text-2xl font-extrabold text-brand-600">R$ {{ cart.get_total_after_discount }}</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col gap-4">
+                    <button type="submit"
+                        class="w-full bg-[#25D366] hover:bg-[#128C7E] border border-transparent rounded-lg shadow-sm py-4 px-4 flex justify-center items-center text-lg font-bold text-white transition-colors uppercase tracking-wide">
+                        <svg class="w-6 h-6 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                            <path
+                                d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z" />
+                        </svg>
+                        Enviar Pedido no WhatsApp
+                    </button>
+
+                    <a href="{% url 'cart:cart_detail' %}"
+                        class="w-full bg-white border border-slate-300 rounded-lg shadow-sm py-4 px-4 flex justify-center text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors">
+                        Voltar para o Carrinho
+                    </a>
+                </div>
+
+                <p class="mt-4 text-xs text-center text-slate-500">
+                    Ao clicar em "Enviar", você será redirecionado para o WhatsApp com os detalhes do seu pedido para
+                    nossa equipe de atendimento confirmar o frete e opções de pagamento. Nenhuma cobrança é realizada
+                    agora.
+                </p>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

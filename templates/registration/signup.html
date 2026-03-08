@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block title %}Criar Conta - Studio3D{% endblock %}
+{% block content %}
+<div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <h1 class="text-2xl font-extrabold text-slate-900 mb-6 text-center">Criar Conta</h1>
+    <div class="bg-white border border-slate-200 rounded-2xl shadow-sm p-6">
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+            {% if form.non_field_errors %}
+            <div class="p-3 rounded-lg bg-rose-50 border border-rose-200 text-rose-700 text-sm">
+                {{ form.non_field_errors }}
+            </div>
+            {% endif %}
+            {% for field in form %}
+            <div class="space-y-1">
+                <label class="block text-sm font-medium text-slate-700" for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                <p class="text-xs text-rose-600">{{ field.errors|striptags }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+            <button type="submit" class="w-full bg-brand-600 text-white font-semibold rounded-lg py-2.5 hover:bg-brand-700 transition-colors">Criar conta</button>
+        </form>
+        <p class="text-sm text-slate-500 mt-4 text-center">Já tem conta? <a href="{% url 'login' %}" class="text-brand-600 font-semibold hover:text-brand-700">Entrar</a></p>
+    </div>
+</div>
+{% endblock %}
