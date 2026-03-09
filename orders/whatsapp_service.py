@@ -35,7 +35,7 @@ def generate_whatsapp_link(order_draft):
     if order_draft.coupon:
         text += f"🏷️ Cupom: {order_draft.coupon.code}\n"
     total_final = order_draft.total_after_discount or order_draft.total_estimated
-    text += f"💰 *Total Estimado: R$ {float(total_final):.2f}*\n\n"
+    text += f"💰 *Total: R$ {float(total_final):.2f}*\n\n"
     
     if order_draft.city:
         text += f"📍 Cidade: {order_draft.city}\n"

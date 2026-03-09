@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Loja 3D{% endblock %}</title>
+    <title>{% block title %}NUMIK{% endblock %}</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -34,6 +34,10 @@
         }
     </script>
     <style>
+        body {
+            background-image: radial-gradient(circle at top left, rgba(34, 197, 94, 0.08), transparent 30%),
+                              radial-gradient(circle at 90% 10%, rgba(20, 184, 166, 0.08), transparent 28%);
+        }
         /* Destaque consistente para campos de formulário */
         input:not([type=radio]):not([type=checkbox]),
         select,
@@ -55,20 +59,24 @@
         textarea { resize: vertical; }
         .form-label { font-weight: 600; color: #0f172a; font-size: 0.95rem; }
         .form-help { font-size: 0.8rem; color: #64748b; }
+        .numik-surface {
+            background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.82));
+            backdrop-filter: saturate(140%) blur(6px);
+        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans min-h-screen flex flex-col antialiased">
+<body class="text-slate-900 font-sans min-h-screen flex flex-col antialiased">
     
     <!-- Navbar -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+    <header class="numik-surface border-b border-slate-200/70 shadow-sm sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{% url 'catalog:home' %}" class="text-2xl font-bold text-slate-900 flex items-center gap-2">
                         <svg class="w-8 h-8 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
-                        Studio<span class="text-brand-600">3D</span>
+                        NU<span class="text-brand-600">MIK</span>
                     </a>
                 </div>
                 
@@ -134,7 +142,7 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                 <div>
                     <span class="text-xl font-bold text-slate-900 flex items-center gap-2 mb-4">
-                        Studio<span class="text-brand-600">3D</span>
+                        NU<span class="text-brand-600">MIK</span>
                     </span>
                     <p class="text-slate-500 text-sm">
                         Produção sob demanda com tecnologia de impressão 3D. Peças personalizadas, brindes e decoração.
@@ -157,7 +165,7 @@
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-slate-200 text-center text-sm text-slate-400">
-                &copy; {% now "Y" %} Studio3D. Todos os direitos reservados.
+                &copy; {% now "Y" %} NUMIK. Todos os direitos reservados.
             </div>
         </div>
     </footer>

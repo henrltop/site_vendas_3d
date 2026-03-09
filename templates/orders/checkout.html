@@ -74,20 +74,6 @@
                                     <span class="text-slate-500">Retirar pessoalmente</span>
                                 </label>
                             </div>
-                            <div class="flex items-start gap-3">
-                                <input id="opt_sedex" name="delivery_option" type="radio" value="1 dia útil | SEDEX | R$ 12,17" class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
-                                <label for="opt_sedex" class="text-sm text-slate-700">
-                                    <span class="font-semibold">1 dia útil · R$ 12,17</span><br>
-                                    <span class="text-slate-500">SEDEX</span>
-                                </label>
-                            </div>
-                            <div class="flex items-start gap-3">
-                                <input id="opt_pac" name="delivery_option" type="radio" value="6 dias úteis | PAC | R$ 21,02" class="mt-1 focus:ring-brand-500 h-4 w-4 text-brand-600 border-slate-300">
-                                <label for="opt_pac" class="text-sm text-slate-700">
-                                    <span class="font-semibold">6 dias úteis · R$ 21,02</span><br>
-                                    <span class="text-slate-500">PAC</span>
-                                </label>
-                            </div>
                         </fieldset>
                     </div>
 
@@ -115,7 +101,7 @@
                     </div>
                     {% endif %}
                     <div class="flex items-center justify-between">
-                        <h3 class="text-base font-bold text-slate-900">Total Previsto:</h3>
+                        <h3 class="text-base font-bold text-slate-900">Total:</h3>
                         <p class="text-2xl font-extrabold text-brand-600">R$ {{ cart.get_total_after_discount }}</p>
                     </div>
                 </div>
@@ -138,8 +124,7 @@
 
                 <p class="mt-4 text-xs text-center text-slate-500">
                     Ao clicar em "Enviar", você será redirecionado para o WhatsApp com os detalhes do seu pedido para
-                    nossa equipe de atendimento confirmar o frete e opções de pagamento. Nenhuma cobrança é realizada
-                    agora.
+                    nossa equipe de atendimento. O valor acima é o total do seu pedido.
                 </p>
             </div>
         </form>

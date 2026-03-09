@@ -2,18 +2,20 @@
 
 {% block content %}
 <!-- Hero Section -->
-<section class="bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
-        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl">
-            <span class="block">Impressão 3D de Alta Qualidade</span>
-            <span class="block text-brand-600">Sob Demanda</span>
+<section class="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-white">
+    <div class="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-brand-100 blur-3xl opacity-60"></div>
+    <div class="absolute -bottom-24 -right-20 w-72 h-72 rounded-full bg-teal-100 blur-3xl opacity-60"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center relative">
+        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl leading-tight">
+            <span class="block">NUMIK: Impressão 3D com</span>
+            <span class="block text-brand-600">design e precisão</span>
         </h1>
-        <p class="mt-3 max-w-md mx-auto text-base text-slate-500 sm:text-lg md:mt-5 md:text-xl md:max-w-3xl">
-            Descubra criações únicas para decoração, utilitários e peças exclusivas feitas com precisão.
+        <p class="mt-4 max-w-md mx-auto text-base text-slate-600 sm:text-lg md:mt-6 md:text-xl md:max-w-3xl">
+            Produtos sob demanda para casa, escritório e presentes criativos, com acabamento de qualidade e visual moderno.
         </p>
         <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center gap-4">
             <a href="{% url 'catalog:product_list' %}"
-                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-brand-600 hover:bg-brand-700 md:py-4 md:text-lg md:px-10 transition-colors shadow-sm">
+                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-brand-600 hover:bg-brand-700 md:py-4 md:text-lg md:px-10 transition-colors shadow-lg shadow-brand-100">
                 Ver Catálogo
             </a>
         </div>
