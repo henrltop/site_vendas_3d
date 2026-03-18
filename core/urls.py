@@ -15,9 +15,10 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
+from django.views.static import serve
 from django.contrib.auth import views as auth_views
 from core import views as core_views
 
@@ -30,7 +31,6 @@ urlpatterns = [
     path('conta/entrar/', core_views.LoginView.as_view(), name='login'),
     path('conta/sair/', core_views.logout_view, name='logout'),
     path('conta/registrar/', core_views.signup, name='signup'),
+    # Serve media files (dev + production — configure nginx for high-traffic)
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT}),
 ]
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

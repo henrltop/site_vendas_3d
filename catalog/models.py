@@ -1,5 +1,11 @@
+import io
+import os
+
 from django.db import models
 from django.urls import reverse
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from PIL import Image as PILImage
 
 
 class Tag(models.Model):
@@ -69,6 +75,38 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Imagem de {self.product.name}"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            self._convert_to_webp()
+
+    def _convert_to_webp(self):
+        name = self.image.name
+        if not name or name.lower().endswith('.webp'):
+            return
+        try:
+            with default_storage.open(name, 'rb') as f:
+                img = PILImage.open(f)
+                img.load()
+
+            if img.mode in ('RGBA', 'LA', 'P'):
+                img = img.convert('RGBA')
+            else:
+                img = img.convert('RGB')
+
+            buffer = io.BytesIO()
+            img.save(buffer, format='WEBP', quality=82, method=6)
+            buffer.seek(0)
+
+            webp_name = os.path.splitext(name)[0] + '.webp'
+            default_storage.save(webp_name, ContentFile(buffer.read()))
+            default_storage.delete(name)
+
+            ProductImage.objects.filter(pk=self.pk).update(image=webp_name)
+            self.image.name = webp_name
+        except Exception:
+            pass  # Keep original if conversion fails
 
 
 class ProductColor(models.Model):

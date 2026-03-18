@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Peça não encontrada — NUMIK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at 20% 20%, rgba(34,197,94,0.08), transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(20,184,166,0.07), transparent 35%),
+                        #f8fafc;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(-2deg); }
+            50%       { transform: translateY(-16px) rotate(2deg); }
+        }
+        @keyframes blink {
+            0%, 90%, 100% { opacity: 1; }
+            95%            { opacity: 0; }
+        }
+        @keyframes layer {
+            0%   { stroke-dashoffset: 120; }
+            100% { stroke-dashoffset: 0; }
+        }
+        .float-anim  { animation: float 4s ease-in-out infinite; }
+        .blink-anim  { animation: blink 3s ease-in-out infinite; }
+        .layer-anim  { stroke-dasharray: 120; animation: layer 2s ease forwards; }
+        @media (prefers-reduced-motion: reduce) {
+            .float-anim, .blink-anim, .layer-anim { animation: none !important; }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col antialiased text-slate-800">
+
+    <!-- Topo minimalista -->
+    <header class="px-6 py-4">
+        <a href="/" class="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
+            <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            NU<span class="text-brand-600">MIK</span>
+        </a>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="text-center max-w-lg">
+
+            <!-- Ilustração: cubo 3D imprimindo no vácuo -->
+            <div class="flex justify-center mb-8">
+                <div class="float-anim">
+                    <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <!-- Mesa da impressora -->
+                        <rect x="20" y="130" width="120" height="6" rx="3" fill="#e2e8f0"/>
+                        <!-- Estrutura da impressora (colunas) -->
+                        <rect x="28" y="50" width="4" height="80" rx="2" fill="#cbd5e1"/>
+                        <rect x="128" y="50" width="4" height="80" rx="2" fill="#cbd5e1"/>
+                        <!-- Barra horizontal do cabeçote -->
+                        <rect x="28" y="52" width="104" height="4" rx="2" fill="#94a3b8"/>
+                        <!-- Cabeçote de impressão -->
+                        <rect x="72" y="52" width="16" height="10" rx="2" fill="#64748b"/>
+                        <!-- Filamento saindo (pontilhado) -->
+                        <line x1="80" y1="62" x2="80" y2="72" stroke="#16a34a" stroke-width="2" stroke-dasharray="3 2"/>
+                        <!-- Cubo sendo impresso (incompleto, faltando topo) -->
+                        <!-- Base do cubo -->
+                        <path d="M55 110 L80 97 L105 110 L80 123 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+                        <!-- Lado esquerdo -->
+                        <path d="M55 110 L55 88 L80 75 L80 97 Z" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.5"/>
+                        <!-- Lado direito -->
+                        <path d="M105 110 L105 88 L80 75 L80 97 Z" fill="#86efac" stroke="#16a34a" stroke-width="1.5"/>
+                        <!-- Topo incompleto (borda tracejada) -->
+                        <path d="M55 88 L80 75 L105 88" stroke="#16a34a" stroke-width="1.5" stroke-dasharray="4 3" fill="none" class="layer-anim"/>
+                        <!-- Número 404 flutuando no cubo -->
+                        <text x="80" y="102" text-anchor="middle" font-family="Inter, sans-serif" font-size="12" font-weight="800" fill="#15803d">404</text>
+                        <!-- Ponto de luz piscando no cabeçote -->
+                        <circle cx="80" cy="48" r="3" fill="#22c55e" class="blink-anim"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Código do erro -->
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100 text-brand-700 text-xs font-bold uppercase tracking-wider mb-4">
+                Erro 404 &mdash; Não encontrado
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                Essa peça se perdeu<br>no vácuo da impressora
+            </h1>
+
+            <p class="text-slate-500 text-base leading-relaxed mb-2">
+                O produto que você procura pode ter sido removido da loja, reformulado ou simplesmente nunca existiu por aqui.
+            </p>
+            <p class="text-slate-400 text-sm mb-8">
+                Mas não se preocupe &mdash; temos muita coisa <em>saindo quentinha</em> da impressora!
+            </p>
+
+            <!-- Ações -->
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/produtos/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-600 text-white font-bold text-sm hover:bg-brand-700 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Ver Catálogo
+                </a>
+                <a href="/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Página Inicial
+                </a>
+            </div>
+
+            <!-- Dica extra -->
+            <p class="mt-10 text-xs text-slate-400">
+                Algo sumiu mesmo? Fale com a gente no
+                <a href="https://wa.me/5565981518155" class="text-brand-600 hover:underline font-medium">WhatsApp</a>
+                &mdash; a impressora não engole encomendas.
+            </p>
+        </div>
+    </main>
+
+    <footer class="text-center pb-6 text-xs text-slate-400">
+        &copy; {% now "Y" %} NUMIK. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

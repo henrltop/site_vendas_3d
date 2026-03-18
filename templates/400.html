@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido confuso — NUMIK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at 60% 15%, rgba(139,92,246,0.07), transparent 35%),
+                        radial-gradient(circle at 20% 80%, rgba(34,197,94,0.07), transparent 35%),
+                        #f8fafc;
+        }
+        @keyframes spin-slow {
+            from { transform: rotate(0deg); }
+            to   { transform: rotate(360deg); }
+        }
+        @keyframes confused {
+            0%,100% { transform: rotate(-4deg) translateY(0); }
+            25%      { transform: rotate(4deg)  translateY(-6px); }
+            50%      { transform: rotate(-3deg) translateY(-2px); }
+            75%      { transform: rotate(3deg)  translateY(-8px); }
+        }
+        @keyframes question-pop {
+            0%,100% { transform: scale(1) translateY(0); opacity: 1; }
+            50%      { transform: scale(1.15) translateY(-5px); opacity: 0.8; }
+        }
+        .confused-anim { animation: confused 3s ease-in-out infinite; }
+        .spin-anim     { animation: spin-slow 6s linear infinite; }
+        .q1 { animation: question-pop 2s ease-in-out 0s infinite; }
+        .q2 { animation: question-pop 2s ease-in-out 0.6s infinite; }
+        .q3 { animation: question-pop 2s ease-in-out 1.2s infinite; }
+        @media (prefers-reduced-motion: reduce) {
+            .confused-anim, .spin-anim, .q1, .q2, .q3 { animation: none !important; }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col antialiased text-slate-800">
+
+    <header class="px-6 py-4">
+        <a href="/" class="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
+            <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            NU<span class="text-brand-600">MIK</span>
+        </a>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="text-center max-w-lg">
+
+            <!-- Ilustração: robô impressora confuso com interrogações -->
+            <div class="flex justify-center mb-8">
+                <div class="relative">
+                    <!-- Interrogações flutuando -->
+                    <span class="absolute -top-2 -left-4 text-2xl font-black text-violet-400 q1" aria-hidden="true">?</span>
+                    <span class="absolute -top-4 right-2 text-3xl font-black text-brand-500 q2" aria-hidden="true">?</span>
+                    <span class="absolute top-2 -right-5 text-xl font-black text-amber-400 q3" aria-hidden="true">?</span>
+
+                    <div class="confused-anim">
+                        <svg width="150" height="155" viewBox="0 0 150 155" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <!-- Antena com engrenagem girando -->
+                            <line x1="75" y1="22" x2="75" y2="8" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round"/>
+                            <g class="spin-anim" style="transform-origin: 75px 6px;">
+                                <circle cx="75" cy="6" r="7" fill="none" stroke="#8b5cf6" stroke-width="2"/>
+                                <path d="M75 1 L76.5 3.5 L75 6 L73.5 3.5Z M80 6 L77.5 7.5 L75 6 L77.5 4.5Z M75 11 L73.5 8.5 L75 6 L76.5 8.5Z M70 6 L72.5 4.5 L75 6 L72.5 7.5Z" fill="#8b5cf6"/>
+                            </g>
+
+                            <!-- Cabeça -->
+                            <rect x="45" y="22" width="60" height="50" rx="10" fill="#1e293b"/>
+                            <!-- Olho esquerdo (espantado) -->
+                            <circle cx="62" cy="40" r="10" fill="#f1f5f9"/>
+                            <circle cx="64" cy="40" r="5" fill="#8b5cf6"/>
+                            <circle cx="66" cy="38" r="1.5" fill="white"/>
+                            <!-- Olho direito (espantado) -->
+                            <circle cx="88" cy="40" r="10" fill="#f1f5f9"/>
+                            <circle cx="90" cy="40" r="5" fill="#8b5cf6"/>
+                            <circle cx="92" cy="38" r="1.5" fill="white"/>
+                            <!-- Boca (confusa / torta) -->
+                            <path d="M62 58 Q68 54 75 58 Q82 62 88 57" stroke="#94a3b8" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+
+                            <!-- Corpo -->
+                            <rect x="35" y="75" width="80" height="55" rx="8" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+                            <!-- Painel com "400" e estática -->
+                            <rect x="46" y="85" width="58" height="32" rx="4" fill="#1e293b"/>
+                            <!-- Estática / glitch lines -->
+                            <line x1="46" y1="91" x2="104" y2="91" stroke="#334155" stroke-width="1"/>
+                            <line x1="46" y1="95" x2="80" y2="95" stroke="#475569" stroke-width="1"/>
+                            <line x1="70" y1="99" x2="104" y2="99" stroke="#334155" stroke-width="1"/>
+                            <!-- Texto 400 -->
+                            <text x="75" y="108" text-anchor="middle" font-family="monospace" font-size="14" font-weight="800" fill="#a78bfa">400</text>
+
+                            <!-- Braços levantados (confuso) -->
+                            <path d="M35 88 Q22 80 18 70" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+                            <path d="M115 88 Q128 80 132 70" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round"/>
+                            <!-- Mãozinhas -->
+                            <circle cx="17" cy="68" r="6" fill="#cbd5e1"/>
+                            <circle cx="133" cy="68" r="6" fill="#cbd5e1"/>
+
+                            <!-- Pernas -->
+                            <rect x="52" y="130" width="16" height="18" rx="4" fill="#cbd5e1"/>
+                            <rect x="82" y="130" width="16" height="18" rx="4" fill="#cbd5e1"/>
+                            <!-- Pezinhos -->
+                            <rect x="48" y="144" width="22" height="8" rx="3" fill="#94a3b8"/>
+                            <rect x="80" y="144" width="22" height="8" rx="3" fill="#94a3b8"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-100 text-violet-700 text-xs font-bold uppercase tracking-wider mb-4">
+                Erro 400 &mdash; Pedido inválido
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                Nossa impressora<br>ficou confusa
+            </h1>
+
+            <p class="text-slate-500 text-base leading-relaxed mb-2">
+                O pedido que chegou aqui não faz muito sentido &mdash; é como pedir para imprimir
+                um arquivo em branco num formato que não existe.
+            </p>
+            <p class="text-slate-400 text-sm mb-8">
+                Isso geralmente acontece quando algo deu errado no caminho. Tente voltar ao início!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/produtos/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-600 text-white font-bold text-sm hover:bg-brand-700 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+                    Ver Catálogo
+                </a>
+                <a href="/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Página Inicial
+                </a>
+            </div>
+
+            <p class="mt-10 text-xs text-slate-400">
+                Continua sem funcionar?
+                <a href="https://wa.me/5565981518155" class="text-brand-600 hover:underline font-medium">Chama no WhatsApp</a>
+                que a gente resolve na mão.
+            </p>
+        </div>
+    </main>
+
+    <footer class="text-center pb-6 text-xs text-slate-400">
+        &copy; {% now "Y" %} NUMIK. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

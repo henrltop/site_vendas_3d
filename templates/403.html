@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área restrita — NUMIK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at 30% 20%, rgba(239,68,68,0.07), transparent 35%),
+                        radial-gradient(circle at 70% 80%, rgba(251,146,60,0.06), transparent 35%),
+                        #f8fafc;
+        }
+        @keyframes wiggle {
+            0%,100% { transform: rotate(0deg); }
+            15%      { transform: rotate(-8deg); }
+            30%      { transform: rotate(8deg); }
+            45%      { transform: rotate(-5deg); }
+            60%      { transform: rotate(5deg); }
+            75%      { transform: rotate(-2deg); }
+        }
+        @keyframes pulse-lock {
+            0%,100% { transform: scale(1); }
+            50%      { transform: scale(1.08); }
+        }
+        @keyframes scanline {
+            0%   { transform: translateY(0); opacity: 0.6; }
+            100% { transform: translateY(60px); opacity: 0; }
+        }
+        .wiggle-anim    { animation: wiggle 1.2s ease-in-out infinite; transform-origin: top center; }
+        .pulse-lock     { animation: pulse-lock 2s ease-in-out infinite; }
+        .scan           { animation: scanline 1.5s linear infinite; }
+        @media (prefers-reduced-motion: reduce) {
+            .wiggle-anim, .pulse-lock, .scan { animation: none !important; }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col antialiased text-slate-800">
+
+    <header class="px-6 py-4">
+        <a href="/" class="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
+            <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            NU<span class="text-brand-600">MIK</span>
+        </a>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="text-center max-w-lg">
+
+            <!-- Ilustração: cadeado com capacete de segurança -->
+            <div class="flex justify-center mb-8">
+                <svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+
+                    <!-- Capacete de segurança -->
+                    <g class="wiggle-anim">
+                        <!-- Aba do capacete -->
+                        <path d="M38 78 Q38 44 80 40 Q122 44 122 78 L118 82 L42 82 Z" fill="#fbbf24"/>
+                        <!-- Brilho no capacete -->
+                        <path d="M50 58 Q60 48 75 48" stroke="white" stroke-width="3" stroke-linecap="round" opacity="0.5"/>
+                        <!-- Faixa do capacete -->
+                        <rect x="42" y="76" width="76" height="10" rx="2" fill="#f59e0b"/>
+                        <!-- Tira inferior -->
+                        <path d="M55 86 Q55 96 80 96 Q105 96 105 86" stroke="#d97706" stroke-width="3" stroke-linecap="round" fill="none"/>
+                        <!-- Logo 403 no capacete -->
+                        <text x="80" y="70" text-anchor="middle" font-family="Inter, sans-serif" font-size="11" font-weight="800" fill="#92400e">403</text>
+                    </g>
+
+                    <!-- Cadeado -->
+                    <g class="pulse-lock">
+                        <!-- Corpo do cadeado -->
+                        <rect x="56" y="105" width="48" height="38" rx="6" fill="#1e293b"/>
+                        <!-- Arco do cadeado -->
+                        <path d="M66 105 L66 94 Q66 80 80 80 Q94 80 94 94 L94 105" stroke="#334155" stroke-width="8" stroke-linecap="round" fill="none"/>
+                        <!-- Buraco da fechadura -->
+                        <circle cx="80" cy="120" r="7" fill="#64748b"/>
+                        <rect x="77" y="120" width="6" height="10" rx="2" fill="#64748b"/>
+                        <!-- Linha de scan no cadeado -->
+                        <rect x="56" y="105" width="48" height="3" rx="1" fill="#22c55e" opacity="0.4" class="scan"/>
+                    </g>
+                </svg>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase tracking-wider mb-4">
+                Erro 403 &mdash; Acesso negado
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                Capacete e crachá,<br>por favor
+            </h1>
+
+            <p class="text-slate-500 text-base leading-relaxed mb-2">
+                Você tentou entrar em uma área restrita da fábrica. Nossa impressora 3D não imprime
+                credenciais de acesso, infelizmente.
+            </p>
+            <p class="text-slate-400 text-sm mb-8">
+                Se você tem uma conta, entre com ela. Se não tem, crie uma &mdash; é de graça!
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="/conta/entrar/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-brand-600 text-white font-bold text-sm hover:bg-brand-700 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/></svg>
+                    Fazer Login
+                </a>
+                <a href="/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Página Inicial
+                </a>
+            </div>
+
+            <p class="mt-10 text-xs text-slate-400">
+                Novo por aqui?
+                <a href="/conta/registrar/" class="text-brand-600 hover:underline font-medium">Crie sua conta</a>
+                &mdash; é rápido e sem burocracia.
+            </p>
+        </div>
+    </main>
+
+    <footer class="text-center pb-6 text-xs text-slate-400">
+        &copy; {% now "Y" %} NUMIK. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>

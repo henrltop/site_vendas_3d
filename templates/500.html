@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impressora em chamas — NUMIK</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        brand: { 50:'#f0fdf4', 100:'#dcfce7', 500:'#22c55e', 600:'#16a34a', 700:'#15803d' }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: radial-gradient(circle at 50% 10%, rgba(251,146,60,0.10), transparent 40%),
+                        radial-gradient(circle at 80% 80%, rgba(239,68,68,0.06), transparent 40%),
+                        #f8fafc;
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0) rotate(0deg); }
+            20%      { transform: translateX(-4px) rotate(-1deg); }
+            40%      { transform: translateX(4px) rotate(1deg); }
+            60%      { transform: translateX(-3px) rotate(-0.5deg); }
+            80%      { transform: translateX(3px) rotate(0.5deg); }
+        }
+        @keyframes flicker {
+            0%,100% { opacity: 1; transform: scaleY(1); }
+            30%      { opacity: 0.8; transform: scaleY(0.92) scaleX(1.04); }
+            60%      { opacity: 0.95; transform: scaleY(1.05) scaleX(0.97); }
+        }
+        @keyframes smoke {
+            0%   { opacity: 0.7; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-30px) scale(1.8); }
+        }
+        .shake-anim   { animation: shake 0.6s ease-in-out infinite; }
+        .flicker-anim { animation: flicker 0.4s ease-in-out infinite; transform-origin: bottom; }
+        .smoke-1      { animation: smoke 2s ease-out infinite; }
+        .smoke-2      { animation: smoke 2s ease-out 0.7s infinite; }
+        .smoke-3      { animation: smoke 2s ease-out 1.4s infinite; }
+        @media (prefers-reduced-motion: reduce) {
+            .shake-anim, .flicker-anim, .smoke-1, .smoke-2, .smoke-3 { animation: none !important; }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col antialiased text-slate-800">
+
+    <header class="px-6 py-4">
+        <a href="/" class="text-xl font-bold text-slate-900 inline-flex items-center gap-2">
+            <svg class="w-7 h-7 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+            NU<span class="text-brand-600">MIK</span>
+        </a>
+    </header>
+
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="text-center max-w-lg">
+
+            <!-- Ilustração: impressora em chamas -->
+            <div class="flex justify-center mb-8">
+                <div class="shake-anim">
+                    <svg width="160" height="170" viewBox="0 0 160 170" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <!-- Fumaça -->
+                        <ellipse cx="68" cy="38" rx="6" ry="8" fill="#94a3b8" opacity="0.5" class="smoke-1"/>
+                        <ellipse cx="80" cy="30" rx="7" ry="9" fill="#94a3b8" opacity="0.4" class="smoke-2"/>
+                        <ellipse cx="92" cy="35" rx="5" ry="7" fill="#94a3b8" opacity="0.45" class="smoke-3"/>
+                        <!-- Chamas -->
+                        <g class="flicker-anim">
+                            <path d="M65 75 Q68 55 75 60 Q70 45 80 40 Q90 48 85 58 Q92 52 90 68 Q86 58 80 65 Q78 52 72 62 Q76 68 65 75Z" fill="#fb923c"/>
+                            <path d="M72 75 Q74 62 79 66 Q76 55 82 52 Q88 58 84 66 Q88 60 87 72 Q83 62 79 68 Q77 60 74 68Z" fill="#fde68a"/>
+                        </g>
+                        <!-- Corpo da impressora -->
+                        <rect x="25" y="75" width="110" height="70" rx="6" fill="#e2e8f0" stroke="#cbd5e1" stroke-width="1.5"/>
+                        <!-- Mesa de impressão -->
+                        <rect x="35" y="120" width="90" height="8" rx="2" fill="#94a3b8"/>
+                        <!-- Tela/painel danificado -->
+                        <rect x="38" y="84" width="40" height="24" rx="3" fill="#1e293b"/>
+                        <text x="58" y="101" text-anchor="middle" font-family="monospace" font-size="11" font-weight="700" fill="#ef4444">500</text>
+                        <!-- Raio no painel -->
+                        <path d="M64 87 L60 95 L63 95 L59 103" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <!-- Parafusos nos cantos -->
+                        <circle cx="32" cy="82" r="3" fill="#94a3b8"/>
+                        <circle cx="128" cy="82" r="3" fill="#94a3b8"/>
+                        <circle cx="32" cy="138" r="3" fill="#94a3b8"/>
+                        <circle cx="128" cy="138" r="3" fill="#94a3b8"/>
+                        <!-- Fio saindo -->
+                        <path d="M110 90 Q120 95 125 105 Q128 115 120 118" stroke="#ef4444" stroke-width="2" stroke-linecap="round" fill="none"/>
+                        <!-- Faísca -->
+                        <path d="M119 116 L122 112 M117 118 L121 115" stroke="#fbbf24" stroke-width="1.5" stroke-linecap="round"/>
+                        <!-- Pés -->
+                        <rect x="40" y="145" width="16" height="8" rx="2" fill="#cbd5e1"/>
+                        <rect x="104" y="145" width="16" height="8" rx="2" fill="#cbd5e1"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-orange-700 text-xs font-bold uppercase tracking-wider mb-4">
+                Erro 500 &mdash; Servidor explodiu
+            </div>
+
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-slate-900 mb-3 tracking-tight">
+                Nossa impressora<br>pegou fogo
+            </h1>
+
+            <p class="text-slate-500 text-base leading-relaxed mb-2">
+                Alguma coisa deu muito errado do nosso lado &mdash; não foi você, promessa.
+                Estamos apagando o incêndio agora mesmo.
+            </p>
+            <p class="text-slate-400 text-sm mb-8">
+                Se o problema persistir, nosso filamento de emergência está a um WhatsApp de distância.
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3 justify-center">
+                <a href="javascript:location.reload()"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-orange-500 text-white font-bold text-sm hover:bg-orange-600 transition-colors focus-visible:ring-2 focus-visible:ring-orange-400 focus-visible:ring-offset-2 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    Tentar Novamente
+                </a>
+                <a href="/"
+                    class="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white border border-slate-300 text-slate-700 font-semibold text-sm hover:bg-slate-50 transition-colors focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:outline-none">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                    Página Inicial
+                </a>
+            </div>
+
+            <p class="mt-10 text-xs text-slate-400">
+                Urgente? Fale direto no
+                <a href="https://wa.me/5565981518155" class="text-brand-600 hover:underline font-medium">WhatsApp</a>
+                enquanto a gente ressuscita o servidor.
+            </p>
+        </div>
+    </main>
+
+    <footer class="text-center pb-6 text-xs text-slate-400">
+        &copy; 2025 NUMIK. Todos os direitos reservados.
+    </footer>
+
+</body>
+</html>
