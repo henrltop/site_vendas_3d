@@ -1,22 +1,29 @@
 {% extends 'base.html' %}
 
+{% block title %}NUMIK — Impressão 3D Personalizada{% endblock %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="relative overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-white">
-    <div class="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-brand-100 blur-3xl opacity-60"></div>
-    <div class="absolute -bottom-24 -right-20 w-72 h-72 rounded-full bg-teal-100 blur-3xl opacity-60"></div>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 text-center relative">
-        <h1 class="text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl leading-tight">
+    <div class="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-brand-100 blur-3xl opacity-60 pointer-events-none" aria-hidden="true"></div>
+    <div class="absolute -bottom-24 -right-20 w-72 h-72 rounded-full bg-teal-100 blur-3xl opacity-60 pointer-events-none" aria-hidden="true"></div>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24 text-center relative">
+        <h1 class="text-balance text-4xl tracking-tight font-extrabold text-slate-900 sm:text-5xl md:text-6xl leading-tight">
             <span class="block">NUMIK: Impressão 3D com</span>
             <span class="block text-brand-600">design e precisão</span>
         </h1>
         <p class="mt-4 max-w-md mx-auto text-base text-slate-600 sm:text-lg md:mt-6 md:text-xl md:max-w-3xl">
             Produtos sob demanda para casa, escritório e presentes criativos, com acabamento de qualidade e visual moderno.
         </p>
-        <div class="mt-10 max-w-sm mx-auto sm:max-w-none sm:flex sm:justify-center gap-4">
+        <div class="mt-8 sm:mt-10 flex flex-col sm:flex-row justify-center gap-3 sm:gap-4">
             <a href="{% url 'catalog:product_list' %}"
-                class="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-brand-600 hover:bg-brand-700 md:py-4 md:text-lg md:px-10 transition-colors shadow-lg shadow-brand-100">
+                class="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-base font-semibold rounded-xl text-white bg-brand-600 hover:bg-brand-700 transition-colors shadow-lg shadow-brand-100 md:py-4 md:text-lg md:px-10">
                 Ver Catálogo
+            </a>
+            <a href="https://wa.me/5565981518155" target="_blank" rel="noopener noreferrer"
+                class="inline-flex items-center justify-center px-8 py-3.5 border border-slate-300 text-base font-semibold rounded-xl text-slate-700 bg-white hover:bg-slate-50 transition-colors md:py-4 md:text-lg md:px-10">
+                <svg class="w-5 h-5 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+                Falar no WhatsApp
             </a>
         </div>
     </div>
@@ -24,128 +31,167 @@
 
 <!-- Categorias Em Destaque -->
 {% if categories %}
-<section class="py-12 bg-slate-50">
+<section class="py-10 sm:py-12 bg-slate-50" aria-labelledby="categorias-heading">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-start justify-between gap-3 mb-6">
+        <div class="flex items-center justify-between gap-3 mb-6">
             <div>
                 <p class="text-[11px] font-semibold tracking-[0.18em] text-brand-600 uppercase">Navegue por temas</p>
-                <h2 class="text-2xl font-bold text-slate-900 leading-tight">Categorias</h2>
-                <p class="text-sm text-slate-500 mt-1">Pense mobile: rolagem horizontal com chips tocáveis.</p>
+                <h2 id="categorias-heading" class="text-2xl font-bold text-slate-900 leading-tight">Categorias</h2>
             </div>
             <div class="flex gap-2 items-center shrink-0">
-                <button type="button" data-cat-prev
-                    class="h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-500 hover:text-brand-600 transition">
-                    <span aria-hidden="true">&#8592;</span>
-                    <span class="sr-only">Rolagem para a esquerda</span>
+                <button type="button" id="cat-prev"
+                    class="h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-500 hover:text-brand-600 transition-colors flex items-center justify-center focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+                    aria-label="Rolar categorias para a esquerda">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
                 </button>
-                <button type="button" data-cat-next
-                    class="h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-500 hover:text-brand-600 transition">
-                    <span aria-hidden="true">&#8594;</span>
-                    <span class="sr-only">Rolagem para a direita</span>
+                <button type="button" id="cat-next"
+                    class="h-9 w-9 rounded-full border border-slate-200 bg-white text-slate-600 shadow-sm hover:border-brand-500 hover:text-brand-600 transition-colors flex items-center justify-center focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+                    aria-label="Rolar categorias para a direita">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                 </button>
             </div>
         </div>
 
         <div class="relative">
-            <div class="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-slate-50 to-transparent"></div>
-            <div class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-slate-50 to-transparent"></div>
+            <div class="pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-slate-50 to-transparent z-10" aria-hidden="true"></div>
+            <div class="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-slate-50 to-transparent z-10" aria-hidden="true"></div>
 
-            <div data-cat-scroller
-                class="flex gap-3 overflow-x-auto pb-3 pr-3 scroll-smooth snap-x snap-mandatory scrollbar-hide">
+            <ul id="cat-scroller" role="list"
+                class="flex gap-3 overflow-x-auto pb-3 scroll-smooth snap-x snap-mandatory"
+                style="-ms-overflow-style: none; scrollbar-width: none;">
                 {% for cat in categories %}
-                <a href="{% url 'catalog:product_list' %}?categoria={{ cat.slug }}"
-                    class="group flex-none min-w-[160px] max-w-[200px] rounded-2xl border border-slate-200 bg-white px-4 py-3 snap-start shadow-sm hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md transition-all">
-                    <div class="flex items-center gap-3">
-                        <span class="h-10 w-10 rounded-xl bg-brand-50 border border-brand-100 text-brand-700 flex items-center justify-center">
-                            <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M12 4l7 4v4c0 4-3 6-7 8-4-2-7-4-7-8V8l7-4z" />
-                                <path d="M9 12l3 2 3-2" />
-                            </svg>
-                        </span>
-                        <div class="text-left">
-                            <p class="font-semibold text-slate-900 leading-tight line-clamp-1">{{ cat.name }}</p>
-                            <p class="text-[12px] text-slate-500">{{ cat.products.count|default:0 }} itens</p>
+                <li class="flex-none snap-start">
+                    <a href="{% url 'catalog:product_list' %}?categoria={{ cat.slug }}"
+                        class="group flex min-w-[160px] max-w-[200px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md transition-all focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none">
+                        <div class="flex items-center gap-3">
+                            <span class="h-10 w-10 rounded-xl bg-brand-50 border border-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
+                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M12 4l7 4v4c0 4-3 6-7 8-4-2-7-4-7-8V8l7-4z" />
+                                    <path d="M9 12l3 2 3-2" />
+                                </svg>
+                            </span>
+                            <div class="text-left min-w-0">
+                                <p class="font-semibold text-slate-900 leading-tight truncate">{{ cat.name }}</p>
+                                <p class="text-[12px] text-slate-500">{{ cat.products.count|default:0 }} itens</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
+                    </a>
+                </li>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const scroller = document.querySelector('[data-cat-scroller]');
-            const prev = document.querySelector('[data-cat-prev]');
-            const next = document.querySelector('[data-cat-next]');
-            if (!scroller || !prev || !next) return;
-            const scrollBy = 220;
-            prev.addEventListener('click', function () {
-                scroller.scrollBy({ left: -scrollBy, behavior: 'smooth' });
-            });
-            next.addEventListener('click', function () {
-                scroller.scrollBy({ left: scrollBy, behavior: 'smooth' });
-            });
-        });
-    </script>
 </section>
 {% endif %}
 
 <!-- Produtos em Destaque -->
-<section class="py-12 bg-white">
+<section class="py-10 sm:py-12 bg-white" aria-labelledby="destaque-heading">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-2xl font-bold text-slate-900 mb-8">Novidades em Destaque</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            {% for product in products %}
-            <div
-                class="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg transition-all">
-                <div class="aspect-w-4 aspect-h-3 bg-slate-100 sm:aspect-none sm:h-64 relative">
-                    {% if product.images.first %}
-                    <img src="{{ product.images.first.image.url }}"
-                        alt="{{ product.images.first.alt_text|default:product.name }}"
-                        class="w-full h-full object-center object-cover group-hover:scale-105 transition-transform duration-300">
-                    {% else %}
-                    <div class="w-full h-full flex items-center justify-center text-slate-400">Sem Imagem</div>
-                    {% endif %}
-                </div>
-                <div class="p-6">
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <h3 class="text-lg font-semibold text-slate-900">
-                                <a href="{{ product.get_absolute_url }}">
-                                    <span aria-hidden="true" class="absolute inset-0"></span>
-                                    {{ product.name }}
-                                </a>
-                            </h3>
-                            <p class="mt-1 text-sm text-slate-500 line-clamp-2">{{ product.short_description }}</p>
-                        </div>
-                    </div>
-                    <div class="mt-4 flex items-center justify-between">
-                        <p class="text-lg font-bold text-brand-600">R$ {{ product.base_price }}</p>
-                        <div class="flex items-center gap-2">
-                            <span class="text-xs font-medium bg-slate-100 text-slate-600 px-2 py-1 rounded-full whitespace-nowrap">
-                                {{ product.lead_time_text|default:"Prazo sob consulta" }}
-                            </span>
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit"
-                                    class="ml-2 text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 p-2 rounded-full transition-colors">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    <span class="sr-only">Adicionar ao carrinho</span>
-                                </button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% empty %}
-            <p class="text-slate-500 col-span-full">Nenhum produto cadastrado ainda.</p>
-            {% endfor %}
+        <div class="flex items-center justify-between mb-8">
+            <h2 id="destaque-heading" class="text-2xl font-bold text-slate-900">Novidades em Destaque</h2>
+            <a href="{% url 'catalog:product_list' %}" class="text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors">
+                Ver todos <span aria-hidden="true">&rarr;</span>
+            </a>
         </div>
+        <ul role="list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {% for product in products %}
+            <li class="group relative bg-white border border-slate-200 rounded-2xl overflow-hidden hover:shadow-lg hover:border-brand-300 transition-all duration-200 flex flex-col">
+                <a href="{{ product.get_absolute_url }}" class="block">
+                    <div class="relative bg-slate-100 overflow-hidden h-56">
+                        {% if product.images.first %}
+                        <img src="{{ product.images.first.image.url }}"
+                            alt="{{ product.images.first.alt_text|default:product.name }}"
+                            width="400" height="300"
+                            loading="{% if forloop.counter <= 4 %}eager{% else %}lazy{% endif %}"
+                            class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300">
+                        {% else %}
+                        <div class="w-full h-full flex items-center justify-center text-slate-400 text-sm">
+                            <svg class="w-10 h-10 opacity-30" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                        </div>
+                        {% endif %}
+                        {% if product.category %}
+                        <span class="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-white/90 text-[11px] font-semibold text-brand-700 border border-brand-100">{{ product.category.name }}</span>
+                        {% endif %}
+                    </div>
+                </a>
+                <div class="p-5 flex-1 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 leading-snug mb-1">
+                            <a href="{{ product.get_absolute_url }}" class="hover:text-brand-600 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none rounded">
+                                {{ product.name }}
+                            </a>
+                        </h3>
+                        <p class="text-sm text-slate-500 line-clamp-2">{{ product.short_description }}</p>
+                    </div>
+                    <div class="mt-4 flex items-center justify-between gap-2">
+                        <p class="text-lg font-bold text-brand-600">R$&nbsp;{{ product.base_price }}</p>
+                        <a href="{{ product.get_absolute_url }}"
+                            class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none whitespace-nowrap">
+                            Ver produto
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </li>
+            {% empty %}
+            <li class="col-span-full py-12 text-center text-slate-500">
+                <svg class="mx-auto w-12 h-12 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+                Nenhum produto cadastrado ainda.
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </section>
+
+<!-- Trust badges -->
+<section class="py-10 bg-slate-50 border-t border-slate-100" aria-label="Diferenciais NUMIK">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <ul role="list" class="grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
+            <li class="flex flex-col items-center gap-2">
+                <span class="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center" aria-hidden="true">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                </span>
+                <p class="text-sm font-semibold text-slate-800">Qualidade garantida</p>
+                <p class="text-xs text-slate-500">Peças produzidas com precisão</p>
+            </li>
+            <li class="flex flex-col items-center gap-2">
+                <span class="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center" aria-hidden="true">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </span>
+                <p class="text-sm font-semibold text-slate-800">Prazo ágil</p>
+                <p class="text-xs text-slate-500">3 a 5 dias úteis</p>
+            </li>
+            <li class="flex flex-col items-center gap-2">
+                <span class="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center" aria-hidden="true">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path></svg>
+                </span>
+                <p class="text-sm font-semibold text-slate-800">100% Personalizado</p>
+                <p class="text-xs text-slate-500">Cores e medidas sob pedido</p>
+            </li>
+            <li class="flex flex-col items-center gap-2">
+                <span class="h-12 w-12 rounded-xl bg-brand-50 flex items-center justify-center" aria-hidden="true">
+                    <svg class="w-6 h-6 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                </span>
+                <p class="text-sm font-semibold text-slate-800">Atendimento via WhatsApp</p>
+                <p class="text-xs text-slate-500">Suporte rápido e direto</p>
+            </li>
+        </ul>
+    </div>
+</section>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const scroller = document.getElementById('cat-scroller');
+        const prev = document.getElementById('cat-prev');
+        const next = document.getElementById('cat-next');
+        if (!scroller || !prev || !next) return;
+        const scrollAmount = 220;
+        prev.addEventListener('click', function () {
+            scroller.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+        });
+        next.addEventListener('click', function () {
+            scroller.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+        });
+    });
+</script>
 {% endblock %}

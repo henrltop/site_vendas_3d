@@ -1,132 +1,175 @@
 {% extends 'base.html' %}
 
-{% block title %}Catálogo - NUMIK{% endblock %}
+{% block title %}Catálogo de Produtos — NUMIK{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-    <!-- Header e Busca -->
-    <div class="flex flex-col md:flex-row justify-between items-center mb-8 pb-4 border-b border-slate-200">
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Catálogo de Produtos</h1>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
 
-        <form method="get" class="mt-4 md:mt-0 flex w-full md:w-auto gap-2">
-            {% if current_category %}
-            <input type="hidden" name="categoria" value="{{ current_category }}">
-            {% endif %}
-            <input type="text" name="q" value="{{ search_query|default:'' }}" placeholder="Buscar produtos..."
-                class="flex-1 md:w-64 bg-white border border-slate-300 rounded-md py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
+    <!-- Header e Busca -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-4 border-b border-slate-200">
+        <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-balance">Catálogo de Produtos</h1>
+
+        <form method="get" class="flex w-full sm:w-auto gap-2" role="search">
+            {% if current_category %}<input type="hidden" name="categoria" value="{{ current_category }}">{% endif %}
+            {% if current_tag %}<input type="hidden" name="tag" value="{{ current_tag }}">{% endif %}
+            <label for="search-catalog" class="sr-only">Buscar produtos</label>
+            <input type="search" id="search-catalog" name="q" value="{{ search_query|default:'' }}" placeholder="Buscar produtos..."
+                autocomplete="off"
+                class="flex-1 sm:w-64 bg-white border border-slate-300 rounded-lg py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500">
             <button type="submit"
-                class="bg-slate-900 text-white px-4 py-2 rounded-md hover:bg-slate-800 transition text-sm font-medium">
+                class="bg-slate-900 text-white px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors text-sm font-medium whitespace-nowrap">
                 Buscar
             </button>
         </form>
     </div>
 
-    <div class="flex flex-col md:flex-row gap-8">
+    <!-- Botão filtros mobile -->
+    <div class="md:hidden mb-4">
+        <button id="filter-toggle" type="button"
+            class="w-full flex items-center justify-between px-4 py-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 shadow-sm hover:border-brand-400 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+            aria-expanded="false"
+            aria-controls="filter-panel">
+            <span class="flex items-center gap-2">
+                <svg class="w-4 h-4 text-brand-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L13 13.414V19a1 1 0 01-.553.894l-4 2A1 1 0 017 21v-7.586L3.293 6.707A1 1 0 013 6V4z"></path></svg>
+                Filtros
+                {% if current_category or current_tag %}<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-brand-600 text-white text-[10px] font-bold">1</span>{% endif %}
+            </span>
+            <svg id="filter-chevron" class="w-4 h-4 text-slate-400 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+        </button>
+    </div>
+
+    <div class="flex flex-col md:flex-row gap-6 lg:gap-8">
         <!-- Sidebar - Filtros -->
-        <aside class="md:w-64 flex-shrink-0">
-            <div class="bg-white border text-sm border-slate-200 rounded-xl p-6 sticky top-24">
-                <h3 class="font-bold text-slate-900 mb-4 uppercase tracking-wider text-xs">Categorias</h3>
-                <ul class="space-y-3">
+        <aside id="filter-panel" class="hidden md:block md:w-56 lg:w-64 flex-shrink-0" aria-label="Filtros de produto">
+            <div class="bg-white border border-slate-200 rounded-xl p-5 md:sticky md:top-24 text-sm">
+                <!-- Filtro Categorias -->
+                <h3 class="font-bold text-slate-900 mb-3 uppercase tracking-wider text-xs">Categorias</h3>
+                <ul class="space-y-1" role="list">
                     <li>
-                        <a href="{% url 'catalog:product_list' %}"
-                            class="{% if not current_category %}text-brand-600 font-semibold{% else %}text-slate-600 hover:text-brand-600{% endif %} flex items-center gap-2">
+                        <a href="{% url 'catalog:product_list' %}{% if search_query %}?q={{ search_query }}{% endif %}"
+                            class="flex items-center justify-between px-2 py-1.5 rounded-lg {% if not current_category %}text-brand-700 bg-brand-50 font-semibold{% else %}text-slate-600 hover:text-brand-600 hover:bg-slate-50{% endif %} transition-colors">
                             Todos os Produtos
                         </a>
                     </li>
                     {% for cat in categories %}
                     <li>
-                        <a href="?categoria={{ cat.slug }}"
-                            class="{% if current_category == cat.slug %}text-brand-600 font-semibold{% else %}text-slate-600 hover:text-brand-600{% endif %} flex items-center justify-between">
-                            {{ cat.name }}
-                            <span class="bg-slate-100 text-slate-500 text-[10px] px-2 py-0.5 rounded-full">{{ cat.products.count|default:0 }}</span>
+                        <a href="?categoria={{ cat.slug }}{% if search_query %}&q={{ search_query }}{% endif %}"
+                            class="flex items-center justify-between px-2 py-1.5 rounded-lg {% if current_category == cat.slug %}text-brand-700 bg-brand-50 font-semibold{% else %}text-slate-600 hover:text-brand-600 hover:bg-slate-50{% endif %} transition-colors">
+                            <span>{{ cat.name }}</span>
+                            <span class="bg-slate-100 text-slate-500 text-[10px] px-1.5 py-0.5 rounded-full">{{ cat.products.count|default:0 }}</span>
                         </a>
                     </li>
                     {% endfor %}
                 </ul>
 
                 {% if tags %}
-                <h3 class="font-bold text-slate-900 mt-6 mb-3 uppercase tracking-wider text-xs">Tags</h3>
-                <div class="flex flex-wrap gap-2">
-                    <a href="{% url 'catalog:product_list' %}"
-                        class="px-2.5 py-1 rounded-full text-xs font-semibold border {% if not current_tag %}bg-brand-50 text-brand-700 border-brand-200{% else %}bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-700{% endif %}">Todas</a>
+                <hr class="my-4 border-slate-100">
+                <h3 class="font-bold text-slate-900 mb-3 uppercase tracking-wider text-xs">Tags</h3>
+                <div class="flex flex-wrap gap-1.5">
+                    <a href="{% url 'catalog:product_list' %}{% if current_category %}?categoria={{ current_category }}{% endif %}"
+                        class="px-2.5 py-1 rounded-full text-xs font-semibold border {% if not current_tag %}bg-brand-50 text-brand-700 border-brand-200{% else %}bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-700{% endif %} transition-colors">
+                        Todas
+                    </a>
                     {% for tag in tags %}
-                    <a href="?tag={{ tag.slug }}"
-                        class="px-2.5 py-1 rounded-full text-xs font-semibold border {% if current_tag == tag.slug %}bg-brand-50 text-brand-700 border-brand-200{% else %}bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-700{% endif %}">#{{ tag.name }}</a>
+                    <a href="?tag={{ tag.slug }}{% if current_category %}&categoria={{ current_category }}{% endif %}"
+                        class="px-2.5 py-1 rounded-full text-xs font-semibold border {% if current_tag == tag.slug %}bg-brand-50 text-brand-700 border-brand-200{% else %}bg-slate-50 text-slate-600 border-slate-200 hover:border-brand-300 hover:text-brand-700{% endif %} transition-colors">
+                        #{{ tag.name }}
+                    </a>
                     {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if current_category or current_tag or search_query %}
+                <div class="mt-4 pt-4 border-t border-slate-100">
+                    <a href="{% url 'catalog:product_list' %}" class="text-xs text-rose-600 hover:text-rose-700 font-medium flex items-center gap-1 transition-colors">
+                        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                        Limpar filtros
+                    </a>
                 </div>
                 {% endif %}
             </div>
         </aside>
 
         <!-- Grid de Produtos -->
-        <div class="flex-1">
-                {% if search_query %}
-                <p class="text-slate-500 mb-6">Resultados para: <span class="font-medium text-slate-900">“{{ search_query }}”</span></p>
-                {% endif %}
+        <div class="flex-1 min-w-0">
+            {% if search_query %}
+            <p class="text-slate-500 mb-5 text-sm">Resultados para: <strong class="text-slate-900">&ldquo;{{ search_query }}&rdquo;</strong></p>
+            {% endif %}
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <ul role="list" class="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {% for product in products %}
-                <a href="{{ product.get_absolute_url }}"
-                    class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-brand-500 transition-all duration-300 flex flex-col">
-                    <div class="aspect-w-4 aspect-h-4 bg-slate-100 relative overflow-hidden h-56">
+                <li class="group bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl hover:border-brand-400 transition-all duration-300 flex flex-col">
+                    <a href="{{ product.get_absolute_url }}" class="block relative overflow-hidden bg-slate-100 h-48 sm:h-56" tabindex="-1" aria-hidden="true">
                         {% if product.images.first %}
                         <img src="{{ product.images.first.image.url }}"
-                            alt="{{ product.images.first.alt_text|default:product.name }}"
-                            class="w-full h-full object-center object-cover group-hover:scale-105 transition-transform duration-500">
+                            alt=""
+                            width="400" height="300"
+                            loading="lazy"
+                            class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500">
                         {% else %}
-                        <div class="absolute inset-0 flex items-center justify-center text-slate-400 text-sm">Sem Imagem
+                        <div class="absolute inset-0 flex items-center justify-center text-slate-300">
+                            <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
                         </div>
                         {% endif %}
-                    </div>
-                    <div class="p-5 flex-1 flex flex-col justify-between">
+                    </a>
+                    <div class="p-4 sm:p-5 flex-1 flex flex-col justify-between">
                         <div>
                             <p class="text-xs font-semibold text-brand-600 mb-1 uppercase tracking-wide">
-                                {% if product.category %}
-                                    {{ product.category.name }}
-                                {% else %}
-                                    Geral
-                                {% endif %}
+                                {{ product.category.name|default:"Geral" }}
                             </p>
-                            <h3 class="text-lg font-bold text-slate-900 mb-2 leading-tight">{{ product.name }}</h3>
-                            <p class="text-slate-500 text-sm line-clamp-2 mb-4">{{ product.short_description }}</p>
+                            <h2 class="text-base font-bold text-slate-900 mb-1.5 leading-snug">
+                                <a href="{{ product.get_absolute_url }}" class="hover:text-brand-600 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none rounded">
+                                    {{ product.name }}
+                                </a>
+                            </h2>
+                            <p class="text-slate-500 text-sm line-clamp-2">{{ product.short_description }}</p>
                             {% if product.tags.all %}
-                            <div class="flex flex-wrap gap-2 mb-2">
+                            <div class="flex flex-wrap gap-1 mt-2">
                                 {% for tag in product.tags.all %}
                                 <span class="px-2 py-0.5 rounded-full bg-slate-100 text-[11px] font-semibold text-slate-600">#{{ tag.name }}</span>
                                 {% endfor %}
                             </div>
                             {% endif %}
                         </div>
-                        <div class="flex items-center justify-between mt-auto">
-                            <span class="text-xl font-extrabold text-slate-900">R$ {{ product.base_price }}</span>
-                            <form action="{% url 'cart:cart_add' product.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="quantity" value="1">
-                                <button type="submit"
-                                    class="text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 p-2 rounded-full transition-colors">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                    <span class="sr-only">Adicionar ao carrinho</span>
-                                </button>
-                            </form>
+                        <div class="flex items-center justify-between mt-4 gap-2">
+                            <span class="text-xl font-extrabold text-slate-900">R$&nbsp;{{ product.base_price }}</span>
+                            <a href="{{ product.get_absolute_url }}"
+                                class="inline-flex items-center gap-1.5 text-xs font-semibold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-2 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none whitespace-nowrap"
+                                aria-label="Ver detalhes de {{ product.name }}">
+                                Ver produto
+                                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                            </a>
                         </div>
                     </div>
-                </a>
+                </li>
                 {% empty %}
-                <div class="col-span-full py-12 text-center bg-white rounded-xl border border-slate-200">
-                    <svg class="mx-auto h-12 w-12 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"
-                        aria-hidden="true">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                <li class="col-span-full py-16 text-center bg-white rounded-2xl border border-slate-200">
+                    <svg class="mx-auto h-12 w-12 text-slate-300 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
-                    <h3 class="mt-2 text-sm font-medium text-slate-900">Nenhum produto encontrado</h3>
-                    <p class="mt-1 text-sm text-slate-500">Altere seus filtros ou tente uma nova busca.</p>
-                </div>
+                    <h3 class="text-base font-semibold text-slate-900 mb-1">Nenhum produto encontrado</h3>
+                    <p class="text-sm text-slate-500 mb-4">Altere os filtros ou tente uma nova busca.</p>
+                    <a href="{% url 'catalog:product_list' %}" class="text-sm font-medium text-brand-600 hover:text-brand-700 transition-colors">Limpar filtros &rarr;</a>
+                </li>
                 {% endfor %}
-            </div>
+            </ul>
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const toggle = document.getElementById('filter-toggle');
+        const panel = document.getElementById('filter-panel');
+        const chevron = document.getElementById('filter-chevron');
+        if (!toggle || !panel) return;
+
+        toggle.addEventListener('click', function () {
+            const isOpen = panel.classList.toggle('hidden') === false;
+            // On mobile, panel starts hidden; toggle shows/hides it
+            toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+            if (chevron) chevron.style.transform = isOpen ? 'rotate(180deg)' : '';
+        });
+    });
+</script>
 {% endblock %}

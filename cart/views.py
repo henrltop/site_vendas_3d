@@ -23,6 +23,7 @@ def cart_add(request, product_id):
     
     return redirect('cart:cart_detail')
 
+@require_POST
 def cart_remove(request, item_id):
     cart = Cart(request)
     cart.remove(item_id)
