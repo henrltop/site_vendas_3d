@@ -138,7 +138,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-WHATSAPP_PHONE = os.environ.get('WHATSAPP_PHONE', '')
+WHATSAPP_PHONE = os.environ.get('WHATSAPP_PHONE', '5565981518155')
 
 LOGIN_REDIRECT_URL = 'catalog:product_list'
 LOGOUT_REDIRECT_URL = 'catalog:product_list'

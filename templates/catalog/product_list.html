@@ -60,10 +60,9 @@
 
         <!-- Grid de Produtos -->
         <div class="flex-1">
-            {% if search_query %}
-            <p class="text-slate-500 mb-6">Resultados para: <span class="font-medium text-slate-900">"{{ search_query
-                    }}"</span></p>
-            {% endif %}
+                {% if search_query %}
+                <p class="text-slate-500 mb-6">Resultados para: <span class="font-medium text-slate-900">“{{ search_query }}”</span></p>
+                {% endif %}
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {% for product in products %}

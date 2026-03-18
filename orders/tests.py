@@ -34,7 +34,7 @@ class WhatsAppServiceTests(TestCase):
         self.assertTrue('https://wa.me/' in link)
         self.assertTrue('text=' in link)
         
-        # O link tem que conter os dados encondados (João Silva, Vaso Geométrico, etc)
-        self.assertTrue('Jo%C3%A3o%20Silva' in link)
-        self.assertTrue('Vaso%20Geom%C3%A9trico' in link)
-        self.assertTrue('Total%20Estimado%3A%20R%24%20150.00' in link)
+        # A mensagem deve ser curta e conter apenas identificação básica
+        self.assertIn('pedido%20%23', link)
+        self.assertIn('Jo%C3%A3o%20Silva', link)
+        self.assertNotIn('Total%20Estimado', link)

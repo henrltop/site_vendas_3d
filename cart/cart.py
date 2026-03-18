@@ -10,7 +10,11 @@ class Cart:
         cart = self.session.get('cart')
         if not cart:
             cart = self.session['cart'] = {}
-        self.cart = cart
+
+        # Normaliza imediatamente para remover Decimals residuais de sessões antigas
+        self.cart = self._normalize_cart_dict(cart)
+        self.session['cart'] = self.cart
+        self.session.modified = True
         self.coupon_id = self.session.get('coupon_id')
         self.user_cart = None
 
@@ -19,13 +23,16 @@ class Cart:
             self._sync_authenticated_cart()
 
     def _merge_carts(self, session_cart, db_cart):
-        merged = dict(db_cart or {})
+        merged = self._normalize_cart_dict(db_cart or {})
 
         for item_id, session_item in (session_cart or {}).items():
             if item_id in merged:
-                merged[item_id]['quantity'] = int(merged[item_id].get('quantity', 0)) + int(session_item.get('quantity', 0))
+                # Evita dobrar quantidades: mantém o maior valor (permite extras adicionados antes de logar)
+                merged_qty = int(merged[item_id].get('quantity', 0))
+                session_qty = int(session_item.get('quantity', 0))
+                merged[item_id]['quantity'] = max(merged_qty, session_qty)
             else:
-                merged[item_id] = session_item
+                merged[item_id] = self._normalize_item(session_item)
 
         return merged
 
@@ -39,6 +46,7 @@ class Cart:
         else:
             final_cart = db_cart
 
+        final_cart = self._normalize_cart_dict(final_cart)
         self.cart = final_cart
         self.session['cart'] = final_cart
 
@@ -92,6 +100,8 @@ class Cart:
             self.save()
 
     def save(self):
+        # Normaliza antes de persistir para evitar problemas com JSON serializer em sessão/JSONField
+        self.cart = self._normalize_cart_dict(self.cart)
         self.session['cart'] = self.cart
         self.session['coupon_id'] = self.coupon_id
 
@@ -132,20 +142,17 @@ class Cart:
     def __iter__(self):
         product_ids = [item['product_id'] for item in self.cart.values()]
         products = Product.objects.filter(id__in=product_ids)
+        product_map = {product.id: product for product in products}
         
-        cart_copy = self.cart.copy()
-        
-        # Mapeando instâncias de produto de volta aos itens
-        for product in products:
-            for item_id, item_data in cart_copy.items():
-                if item_data['product_id'] == product.id:
-                    item_data['product'] = product
-                    
-        for item_id, item in cart_copy.items():
-            if 'product' not in item:
+        for item_id, item_data in self.cart.items():
+            product = product_map.get(item_data['product_id'])
+            if product is None:
                 continue # produto foi deletado
-                
-            item['id'] = item_id 
+
+            # Copiamos os dados do item antes de enriquecer para não mutar a sessão.
+            item = item_data.copy()
+            item['product'] = product
+            item['id'] = item_id
             item['price'] = Decimal(item['price'])
             item['total_price'] = item['price'] * item['quantity']
             yield item
@@ -183,3 +190,25 @@ class Cart:
         self.session['cart'] = {}
         self.cart = {}
         self.save()
+
+    # --- Helpers ---
+    def _normalize_item(self, item_data):
+        item = item_data or {}
+        price_raw = item.get('price', '0')
+
+        # Converte Decimals (ou outros números) para string; Django JSON serializer não aceita Decimal
+        if isinstance(price_raw, Decimal):
+            price = str(price_raw)
+        else:
+            price = str(price_raw)
+
+        return {
+            'product_id': item.get('product_id'),
+            'quantity': int(item.get('quantity', 0)),
+            'color': item.get('color'),
+            'custom_fields': item.get('custom_fields') or {},
+            'price': price,
+        }
+
+    def _normalize_cart_dict(self, cart_data):
+        return {item_id: self._normalize_item(data) for item_id, data in (cart_data or {}).items() if isinstance(data, dict)}
