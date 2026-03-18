@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}NUMIK — Impressão 3D Personalizada{% endblock %}
+{% block meta_description %}NUMIK: impressão 3D personalizada sob demanda. Peças únicas, brindes, chaveiros, decoração e muito mais. Produção em 3 a 5 dias úteis. Envio para todo o Brasil.{% endblock %}
 
 {% block content %}
 <!-- Hero Section -->
@@ -62,7 +63,7 @@
                 {% for cat in categories %}
                 <li class="flex-none snap-start">
                     <a href="{% url 'catalog:product_list' %}?categoria={{ cat.slug }}"
-                        class="group flex min-w-[160px] max-w-[200px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md transition-all focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none">
+                        class="group flex w-[176px] rounded-2xl border border-slate-200 bg-white px-4 py-3 shadow-sm hover:-translate-y-0.5 hover:border-brand-500 hover:shadow-md transition-all focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none overflow-hidden">
                         <div class="flex items-center gap-3">
                             <span class="h-10 w-10 rounded-xl bg-brand-50 border border-brand-100 text-brand-700 flex items-center justify-center flex-shrink-0" aria-hidden="true">
                                 <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">

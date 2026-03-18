@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
+    <meta name="description" content="{% block meta_description %}Impressão 3D personalizada sob demanda. Peças únicas, brindes e decoração com qualidade e entrega rápida em todo o Brasil.{% endblock %}">
     <title>{% block title %}NUMIK{% endblock %}</title>
 
     <!-- Google Fonts -->
@@ -124,7 +125,7 @@
                     {% endif %}
 
                     <!-- Carrinho -->
-                    <a href="{% url 'cart:cart_detail' %}" class="relative text-slate-600 hover:text-brand-600 transition-colors p-2 rounded-lg focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none" aria-label="Carrinho{% if cart.get_total_items > 0 %} ({{ cart.get_total_items }} {% if cart.get_total_items == 1 %}item{% else %}itens{% endif %}){% endif %}">
+                    <a href="{% url 'cart:cart_detail' %}" class="relative text-slate-600 hover:text-brand-600 transition-colors p-2.5 rounded-lg focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none" aria-label="Carrinho{% if cart.get_total_items > 0 %} ({{ cart.get_total_items }} {% if cart.get_total_items == 1 %}item{% else %}itens{% endif %}){% endif %}">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 0a2 2 0 100 4 2 2 0 000-4z"></path></svg>
                         {% if cart.get_total_items > 0 %}
                         <span class="absolute top-0 right-0 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-brand-600 rounded-full translate-x-1 -translate-y-1" aria-hidden="true">{{ cart.get_total_items }}</span>
@@ -133,7 +134,7 @@
 
                     <!-- Botão Mobile Menu -->
                     <button id="mobile-menu-btn" type="button"
-                        class="md:hidden p-2 rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
+                        class="md:hidden p-2.5 rounded-lg text-slate-600 hover:text-brand-600 hover:bg-slate-100 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:outline-none"
                         aria-label="Abrir menu de navegação"
                         aria-expanded="false"
                         aria-controls="mobile-menu">

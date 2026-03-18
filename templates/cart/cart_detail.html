@@ -48,7 +48,7 @@
                                 <form action="{% url 'cart:cart_remove' item.id %}" method="post" class="flex-shrink-0">
                                     {% csrf_token %}
                                     <button type="submit"
-                                        class="p-1.5 text-slate-400 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:outline-none"
+                                        class="p-3 text-slate-500 hover:text-rose-500 hover:bg-rose-50 rounded-lg transition-colors focus-visible:ring-2 focus-visible:ring-rose-400 focus-visible:outline-none"
                                         aria-label="Remover {{ item.product.name }} do carrinho">
                                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
@@ -67,7 +67,7 @@
 
                             <!-- Preço + Quantidade -->
                             <div class="flex items-center justify-between gap-3 mt-auto flex-wrap">
-                                <p class="text-base font-bold text-slate-900">R$&nbsp;{{ item.price }} <span class="font-normal text-slate-400 text-sm">/ un.</span></p>
+                                <p class="text-base font-bold text-slate-900">R$&nbsp;{{ item.price }} <span class="font-normal text-slate-500 text-sm">/ un.</span></p>
 
                                 <form action="{% url 'cart:cart_update' item.id %}" method="post" class="flex items-center gap-2">
                                     {% csrf_token %}
@@ -168,7 +168,7 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
                     Avançar para Checkout
                 </a>
-                <p class="text-center text-xs text-slate-400">Pagamento confirmado via WhatsApp</p>
+                <p class="text-center text-xs text-slate-500">Pagamento confirmado via WhatsApp</p>
             </div>
         </section>
     </div>

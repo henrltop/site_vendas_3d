@@ -97,23 +97,38 @@
             <h2 class="font-bold text-slate-900 mb-5 pb-3 border-b border-slate-100">Cores Disponíveis</h2>
 
             {% if colors %}
-            <div class="space-y-2 mb-4" id="existing-colors">
+            <div class="space-y-3 mb-4" id="existing-colors">
                 {% for color in colors %}
-                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
-                    <input type="color" value="{{ color.hex_optional|default:'#cccccc' }}" id="color_hex_{{ color.pk }}"
-                        name="color_hex_{{ color.pk }}" class="w-8 h-8 rounded-lg border border-slate-200 cursor-pointer p-0.5 flex-shrink-0" style="width:2rem;height:2rem;padding:0.1rem;">
-                    <input type="text" name="color_name_{{ color.pk }}" value="{{ color.name }}"
-                        placeholder="Nome da cor" class="flex-1">
-                    <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0">
-                        <input type="checkbox" name="delete_color" value="{{ color.pk }}" class="w-4 h-4 rounded text-rose-500">
-                        <span class="text-xs text-slate-500">Remover</span>
-                    </label>
+                <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2">
+                    <div class="flex items-center gap-3">
+                        <input type="color" value="{{ color.hex_optional|default:'#cccccc' }}" id="color_hex_{{ color.pk }}"
+                            name="color_hex_{{ color.pk }}" class="w-8 h-8 rounded-lg border border-slate-200 cursor-pointer p-0.5 flex-shrink-0" style="width:2rem;height:2rem;padding:0.1rem;">
+                        <input type="text" name="color_name_{{ color.pk }}" value="{{ color.name }}"
+                            placeholder="Nome da cor" class="flex-1">
+                        <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0">
+                            <input type="checkbox" name="delete_color" value="{{ color.pk }}" class="w-4 h-4 rounded text-rose-500">
+                            <span class="text-xs text-slate-500">Remover</span>
+                        </label>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        {% if color.image %}
+                        <img src="{{ color.image.url }}" alt="Imagem da cor {{ color.name }}"
+                            class="w-12 h-12 object-cover rounded-lg border border-slate-200 flex-shrink-0">
+                        {% endif %}
+                        <div class="flex-1">
+                            <label class="block text-xs font-medium text-slate-500 mb-1">
+                                {% if color.image %}Trocar imagem{% else %}Imagem da cor (opcional){% endif %}
+                            </label>
+                            <input type="file" name="color_image_{{ color.pk }}" accept="image/*"
+                                class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+                        </div>
+                    </div>
                 </div>
                 {% endfor %}
             </div>
             {% endif %}
 
-            <div id="new-colors-container" class="space-y-2 mb-4"></div>
+            <div id="new-colors-container" class="space-y-3 mb-4"></div>
 
             <button type="button" id="add-color-btn"
                 class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors">
@@ -244,18 +259,25 @@
 // ── Add Color ───────────────────────────────────────────────────────────────
 let colorCount = 0;
 document.getElementById('add-color-btn').addEventListener('click', function () {
-    colorCount++;
+    const idx = colorCount++;
     const container = document.getElementById('new-colors-container');
     const div = document.createElement('div');
-    div.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200';
+    div.className = 'p-3 bg-slate-50 rounded-xl border border-slate-200 space-y-2';
     div.innerHTML = `
-        <input type="color" value="#cccccc" name="new_color_hex"
-            style="width:2rem;height:2rem;padding:0.1rem;" class="rounded-lg border border-slate-200 cursor-pointer flex-shrink-0">
-        <input type="text" name="new_color_name" placeholder="Nome da cor (ex: Vermelho)" class="flex-1">
-        <button type="button" onclick="this.closest('div').remove()"
-            class="flex-shrink-0 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" aria-label="Remover">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
-        </button>`;
+        <div class="flex items-center gap-3">
+            <input type="color" value="#cccccc" name="new_color_hex_${idx}"
+                style="width:2rem;height:2rem;padding:0.1rem;" class="rounded-lg border border-slate-200 cursor-pointer flex-shrink-0">
+            <input type="text" name="new_color_name_${idx}" placeholder="Nome da cor (ex: Vermelho)" class="flex-1">
+            <button type="button" onclick="this.closest('div.p-3').remove()"
+                class="flex-shrink-0 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" aria-label="Remover">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div>
+            <label class="block text-xs font-medium text-slate-500 mb-1">Imagem da cor (opcional)</label>
+            <input type="file" name="new_color_image_${idx}" accept="image/*"
+                class="block w-full text-xs text-slate-500 file:mr-2 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer">
+        </div>`;
     container.appendChild(div);
 });
 

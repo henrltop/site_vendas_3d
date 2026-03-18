@@ -113,6 +113,7 @@ class ProductColor(models.Model):
     product = models.ForeignKey(Product, related_name='colors', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, verbose_name="Nome da Cor")
     hex_optional = models.CharField(max_length=7, blank=True, help_text="Ex: #FF0000", verbose_name="Código Hexadecimal")
+    image = models.ImageField(upload_to='products/colors/%Y/%m/%d', blank=True, null=True, verbose_name="Imagem da Cor")
 
     class Meta:
         verbose_name = "Cor Disponível"
@@ -121,6 +122,34 @@ class ProductColor(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.product.name})"
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if self.image:
+            self._convert_to_webp()
+
+    def _convert_to_webp(self):
+        name = self.image.name
+        if not name or name.lower().endswith('.webp'):
+            return
+        try:
+            with default_storage.open(name, 'rb') as f:
+                img = PILImage.open(f)
+                img.load()
+            if img.mode in ('RGBA', 'LA', 'P'):
+                img = img.convert('RGBA')
+            else:
+                img = img.convert('RGB')
+            buffer = io.BytesIO()
+            img.save(buffer, format='WEBP', quality=82, method=6)
+            buffer.seek(0)
+            webp_name = os.path.splitext(name)[0] + '.webp'
+            default_storage.save(webp_name, ContentFile(buffer.read()))
+            default_storage.delete(name)
+            ProductColor.objects.filter(pk=self.pk).update(image=webp_name)
+            self.image.name = webp_name
+        except Exception:
+            pass
 
 
 class ProductCustomField(models.Model):

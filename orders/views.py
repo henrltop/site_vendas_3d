@@ -28,15 +28,16 @@ def checkout(request):
         discount_amount = cart.get_discount()
         total_after_discount = cart.get_total_after_discount()
         
-        items_json = []
+        items_json = {}
         for item in cart:
-            items_json.append({
+            items_json[item['id']] = {
+                'product_id': item['product'].id,
                 'product_name': item['product'].name,
                 'quantity': item['quantity'],
                 'color': item['color'],
                 'custom_fields': item['custom_fields'],
-                'unit_price': str(item['price'])
-            })
+                'price': str(item['price']),
+            }
             
         draft = OrderDraft.objects.create(
             user=request.user if request.user.is_authenticated else None,

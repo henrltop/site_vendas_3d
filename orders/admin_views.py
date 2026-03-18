@@ -35,16 +35,25 @@ def _save_product_relations(request, product):
         if name:
             color.name = name
             color.hex_optional = hex_val
+            img_file = request.FILES.get(f'color_image_{color.pk}')
+            if img_file:
+                color.image = img_file
             color.save()
 
-    for name, hex_val in zip(
-        request.POST.getlist('new_color_name'),
-        request.POST.getlist('new_color_hex'),
-    ):
-        if name.strip():
-            ProductColor.objects.create(
-                product=product, name=name.strip(), hex_optional=hex_val.strip()
-            )
+    # New colors use indexed names: new_color_name_0, new_color_hex_0, new_color_image_0
+    idx = 0
+    while True:
+        name = request.POST.get(f'new_color_name_{idx}', '').strip()
+        if not name and f'new_color_name_{idx}' not in request.POST:
+            break
+        if name:
+            hex_val = request.POST.get(f'new_color_hex_{idx}', '').strip()
+            img_file = request.FILES.get(f'new_color_image_{idx}')
+            color = ProductColor(product=product, name=name, hex_optional=hex_val)
+            if img_file:
+                color.image = img_file
+            color.save()
+        idx += 1
 
     # ── CUSTOM FIELDS ────────────────────────────────────────────────────────
     delete_fields = set(request.POST.getlist('delete_field'))
