@@ -1,0 +1,302 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}{% if product %}Editar{% else %}Novo{% endif %} Produto{% endblock %}
+{% block page_title %}{% if product %}Editar: {{ product.name }}{% else %}Novo Produto{% endif %}{% endblock %}
+{% block nav_products %}active{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'custom_admin:product_list' %}" class="text-xs font-medium text-slate-500 hover:text-slate-700 transition-colors">&larr; Voltar</a>
+{% if product %}
+<a href="{{ product.get_absolute_url }}" target="_blank"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50 transition-colors">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
+    Ver na loja
+</a>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data" novalidate>
+{% csrf_token %}
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+    <!-- Coluna principal -->
+    <div class="xl:col-span-2 space-y-5">
+
+        <!-- Informações básicas -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 mb-5 pb-3 border-b border-slate-100">Informações Básicas</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.name.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">
+                        {{ form.name.label }} <span class="text-brand-600" aria-hidden="true">*</span>
+                    </label>
+                    {{ form.name }}
+                    {% if form.name.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.name.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.slug.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.slug.label }}</label>
+                    {{ form.slug }}
+                    <p class="mt-1 text-xs text-slate-400">Usado na URL. Ex: meu-produto-3d</p>
+                    {% if form.slug.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.slug.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.short_description.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.short_description.label }}</label>
+                    {{ form.short_description }}
+                    {% if form.short_description.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.short_description.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.description.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.description.label }}</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.description.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.tags_csv.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.tags_csv.label }}</label>
+                    {{ form.tags_csv }}
+                    <p class="mt-1 text-xs text-slate-400">{{ form.tags_csv.help_text }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Imagens -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 mb-5 pb-3 border-b border-slate-100">Imagens</h2>
+
+            {% if images %}
+            <div class="grid grid-cols-3 sm:grid-cols-4 gap-3 mb-5">
+                {% for img in images %}
+                <div class="relative group">
+                    <img src="{{ img.image.url }}" alt="{{ img.alt_text|default:'Imagem' }}"
+                        class="w-full aspect-square object-cover rounded-xl border border-slate-200">
+                    <label class="absolute top-1.5 right-1.5 cursor-pointer">
+                        <input type="checkbox" name="delete_image" value="{{ img.pk }}"
+                            class="sr-only peer">
+                        <span class="flex items-center justify-center w-6 h-6 rounded-full bg-white/80 border border-slate-200 text-slate-400 peer-checked:bg-rose-500 peer-checked:text-white peer-checked:border-rose-500 transition-all shadow-sm"
+                            title="Marcar para excluir">
+                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+                        </span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            <p class="text-xs text-slate-400 mb-4">Marque o ✕ nas imagens para removê-las ao salvar.</p>
+            {% endif %}
+
+            <div>
+                <label for="new_images" class="block text-sm font-semibold text-slate-700 mb-2">
+                    {% if images %}Adicionar mais imagens{% else %}Enviar imagens{% endif %}
+                </label>
+                <input type="file" id="new_images" name="new_images" multiple accept="image/*"
+                    class="block w-full text-sm text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-brand-50 file:text-brand-700 hover:file:bg-brand-100 cursor-pointer border border-slate-200 rounded-xl p-2">
+                <p class="mt-1 text-xs text-slate-400">JPG, PNG ou WEBP. Você pode selecionar várias de uma vez.</p>
+            </div>
+        </div>
+
+        <!-- Cores -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 mb-5 pb-3 border-b border-slate-100">Cores Disponíveis</h2>
+
+            {% if colors %}
+            <div class="space-y-2 mb-4" id="existing-colors">
+                {% for color in colors %}
+                <div class="flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+                    <input type="color" value="{{ color.hex_optional|default:'#cccccc' }}" id="color_hex_{{ color.pk }}"
+                        name="color_hex_{{ color.pk }}" class="w-8 h-8 rounded-lg border border-slate-200 cursor-pointer p-0.5 flex-shrink-0" style="width:2rem;height:2rem;padding:0.1rem;">
+                    <input type="text" name="color_name_{{ color.pk }}" value="{{ color.name }}"
+                        placeholder="Nome da cor" class="flex-1">
+                    <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0">
+                        <input type="checkbox" name="delete_color" value="{{ color.pk }}" class="w-4 h-4 rounded text-rose-500">
+                        <span class="text-xs text-slate-500">Remover</span>
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div id="new-colors-container" class="space-y-2 mb-4"></div>
+
+            <button type="button" id="add-color-btn"
+                class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Adicionar cor
+            </button>
+        </div>
+
+        <!-- Campos customizados -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 mb-2 pb-3 border-b border-slate-100">Campos de Personalização</h2>
+            <p class="text-xs text-slate-400 mb-5">Campos extras que o cliente preenche ao adicionar ao carrinho (ex: tamanho, texto gravado).</p>
+
+            {% if custom_fields %}
+            <div class="space-y-3 mb-4">
+                {% for field in custom_fields %}
+                <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
+                    <div class="flex items-start justify-between gap-3">
+                        <p class="text-xs font-bold text-slate-500 uppercase tracking-wider">Campo #{{ forloop.counter }}</p>
+                        <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0">
+                            <input type="checkbox" name="delete_field" value="{{ field.pk }}" class="w-4 h-4 rounded text-rose-500">
+                            <span class="text-xs text-slate-500">Remover</span>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Rótulo</label>
+                            <input type="text" name="field_label_{{ field.pk }}" value="{{ field.label }}" placeholder="Ex: Tamanho">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo</label>
+                            <select name="field_type_{{ field.pk }}">
+                                <option value="text" {% if field.field_type == 'text' %}selected{% endif %}>Texto</option>
+                                <option value="number" {% if field.field_type == 'number' %}selected{% endif %}>Número</option>
+                                <option value="select" {% if field.field_type == 'select' %}selected{% endif %}>Seleção</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Opções (se Seleção)</label>
+                            <input type="text" name="field_options_{{ field.pk }}" value="{{ field.options_json }}" placeholder="P,M,G,GG">
+                        </div>
+                        <div class="flex items-center gap-2 pt-4">
+                            <input type="checkbox" id="req_{{ field.pk }}" name="field_required_{{ field.pk }}" value="1"
+                                {% if field.required %}checked{% endif %} class="w-4 h-4 rounded text-brand-600">
+                            <label for="req_{{ field.pk }}" class="text-sm text-slate-700 cursor-pointer">Obrigatório</label>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            <div id="new-fields-container" class="space-y-3 mb-4"></div>
+
+            <button type="button" id="add-field-btn"
+                class="inline-flex items-center gap-1.5 text-sm font-semibold text-brand-600 hover:text-brand-700 transition-colors">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Adicionar campo
+            </button>
+        </div>
+    </div>
+
+    <!-- Coluna lateral -->
+    <div class="space-y-5">
+
+        <!-- Publicar -->
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+            <h2 class="font-bold text-slate-900 mb-5 pb-3 border-b border-slate-100">Publicação</h2>
+            <div class="space-y-4">
+                <div>
+                    <label for="{{ form.category.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.category.label }}</label>
+                    {{ form.category }}
+                    {% if form.category.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.category.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.base_price.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">
+                        {{ form.base_price.label }} <span class="text-brand-600" aria-hidden="true">*</span>
+                    </label>
+                    {{ form.base_price }}
+                    {% if form.base_price.errors %}<p class="mt-1 text-xs text-rose-600">{{ form.base_price.errors|striptags }}</p>{% endif %}
+                </div>
+                <div>
+                    <label for="{{ form.lead_time_text.id_for_label }}" class="block text-sm font-semibold text-slate-700 mb-1">{{ form.lead_time_text.label }}</label>
+                    {{ form.lead_time_text }}
+                </div>
+                <div class="flex items-center gap-3 pt-2">
+                    <input type="checkbox" id="{{ form.is_active.id_for_label }}" name="is_active"
+                        {% if form.is_active.value %}checked{% endif %}
+                        class="w-5 h-5 rounded text-brand-600 border-slate-300 cursor-pointer">
+                    <label for="{{ form.is_active.id_for_label }}" class="text-sm font-semibold text-slate-700 cursor-pointer">
+                        Produto ativo (visível na loja)
+                    </label>
+                </div>
+            </div>
+            <div class="mt-6 space-y-2">
+                <button type="submit"
+                    class="w-full bg-brand-600 text-white font-bold rounded-xl py-3 hover:bg-brand-700 transition-colors focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:outline-none text-sm">
+                    {% if product %}Salvar Alterações{% else %}Criar Produto{% endif %}
+                </button>
+                <a href="{% url 'custom_admin:product_list' %}"
+                    class="block w-full text-center bg-white border border-slate-300 text-slate-600 font-semibold rounded-xl py-2.5 hover:bg-slate-50 transition-colors text-sm">
+                    Cancelar
+                </a>
+            </div>
+        </div>
+
+        {% if product %}
+        <!-- Danger zone -->
+        <div class="bg-white rounded-2xl border border-rose-200 shadow-sm p-5">
+            <h3 class="text-sm font-bold text-rose-700 mb-3">Zona de Perigo</h3>
+            <form action="{% url 'custom_admin:product_delete' product.pk %}" method="post"
+                onsubmit="return confirm('Excluir «{{ product.name }}»? Todos os dados serão perdidos.')">
+                {% csrf_token %}
+                <button type="submit"
+                    class="w-full py-2 px-4 rounded-xl border border-rose-300 text-rose-600 text-sm font-semibold hover:bg-rose-50 transition-colors">
+                    Excluir este produto
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+</form>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// ── Add Color ───────────────────────────────────────────────────────────────
+let colorCount = 0;
+document.getElementById('add-color-btn').addEventListener('click', function () {
+    colorCount++;
+    const container = document.getElementById('new-colors-container');
+    const div = document.createElement('div');
+    div.className = 'flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200';
+    div.innerHTML = `
+        <input type="color" value="#cccccc" name="new_color_hex"
+            style="width:2rem;height:2rem;padding:0.1rem;" class="rounded-lg border border-slate-200 cursor-pointer flex-shrink-0">
+        <input type="text" name="new_color_name" placeholder="Nome da cor (ex: Vermelho)" class="flex-1">
+        <button type="button" onclick="this.closest('div').remove()"
+            class="flex-shrink-0 p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" aria-label="Remover">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>`;
+    container.appendChild(div);
+});
+
+// ── Add Custom Field ─────────────────────────────────────────────────────────
+let fieldCount = 0;
+document.getElementById('add-field-btn').addEventListener('click', function () {
+    fieldCount++;
+    const container = document.getElementById('new-fields-container');
+    const div = document.createElement('div');
+    div.className = 'p-4 bg-slate-50 rounded-xl border border-dashed border-brand-200 space-y-3';
+    div.innerHTML = `
+        <div class="flex items-center justify-between">
+            <p class="text-xs font-bold text-brand-600 uppercase tracking-wider">Novo Campo</p>
+            <button type="button" onclick="this.closest('div.p-4').remove()"
+                class="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors" aria-label="Remover campo">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Rótulo</label>
+                <input type="text" name="new_field_label" placeholder="Ex: Tamanho">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tipo</label>
+                <select name="new_field_type">
+                    <option value="text">Texto</option>
+                    <option value="number">Número</option>
+                    <option value="select">Seleção</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Opções (se Seleção)</label>
+                <input type="text" name="new_field_options" placeholder="P,M,G,GG">
+            </div>
+            <div class="flex items-center gap-2 pt-4">
+                <input type="checkbox" name="new_field_required" value="1" class="w-4 h-4 rounded text-brand-600">
+                <span class="text-sm text-slate-700">Obrigatório</span>
+            </div>
+        </div>`;
+    container.appendChild(div);
+});
+</script>
+{% endblock %}

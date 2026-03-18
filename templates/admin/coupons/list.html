@@ -1,0 +1,97 @@
+{% extends 'admin/base_admin.html' %}
+{% block title %}Cupons{% endblock %}
+{% block page_title %}Cupons{% endblock %}
+{% block nav_coupons %}active{% endblock %}
+
+{% block header_actions %}
+<a href="{% url 'custom_admin:coupon_create' %}"
+    class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-brand-600 text-white text-xs font-semibold hover:bg-brand-700 transition-colors">
+    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+    Novo cupom
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="border-b border-slate-100 bg-slate-50 text-left">
+                    <th class="px-5 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Código</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Desconto</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden md:table-cell">Categoria</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden lg:table-cell">Validade</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider hidden sm:table-cell">Usos</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider">Status</th>
+                    <th class="px-4 py-3 text-xs font-semibold text-slate-400 uppercase tracking-wider text-right">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+                {% for coupon in coupons %}
+                <tr class="hover:bg-slate-50 transition-colors">
+                    <td class="px-5 py-3">
+                        <span class="font-mono font-bold text-slate-900 bg-slate-100 px-2 py-0.5 rounded text-xs tracking-wider">{{ coupon.code }}</span>
+                    </td>
+                    <td class="px-4 py-3">
+                        <span class="font-bold text-brand-600">{{ coupon.discount_percent }}%</span>
+                    </td>
+                    <td class="px-4 py-3 text-slate-600 hidden md:table-cell">
+                        {{ coupon.category.name|default:"Todas categorias" }}
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-500 hidden lg:table-cell whitespace-nowrap">
+                        <p>{{ coupon.valid_from|date:"d/m/Y H:i" }}</p>
+                        <p class="text-slate-400">até {{ coupon.valid_to|date:"d/m/Y H:i" }}</p>
+                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-600 hidden sm:table-cell whitespace-nowrap">
+                        {% if coupon.max_uses %}
+                            <span class="{% if coupon.usage_count >= coupon.max_uses %}text-rose-600 font-semibold{% endif %}">
+                                {{ coupon.usage_count }}/{{ coupon.max_uses }}
+                            </span>
+                        {% else %}
+                            {{ coupon.usage_count }} / ∞
+                        {% endif %}
+                    </td>
+                    <td class="px-4 py-3">
+                        <form action="{% url 'custom_admin:coupon_toggle_active' coupon.pk %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit"
+                                class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold transition-colors
+                                {% if coupon.active %}bg-emerald-100 text-emerald-700 hover:bg-emerald-200{% else %}bg-slate-100 text-slate-500 hover:bg-slate-200{% endif %}"
+                                aria-label="{% if coupon.active %}Desativar{% else %}Ativar{% endif %} cupom {{ coupon.code }}">
+                                {% if coupon.active %}● Ativo{% else %}○ Inativo{% endif %}
+                            </button>
+                        </form>
+                    </td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center justify-end gap-1">
+                            <a href="{% url 'custom_admin:coupon_edit' coupon.pk %}"
+                                class="p-1.5 rounded-lg text-slate-500 hover:text-brand-600 hover:bg-brand-50 transition-colors"
+                                aria-label="Editar {{ coupon.code }}">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                            </a>
+                            <form action="{% url 'custom_admin:coupon_delete' coupon.pk %}" method="post"
+                                onsubmit="return confirm('Excluir cupom «{{ coupon.code }}»?')">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    class="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                                    aria-label="Excluir {{ coupon.code }}">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7" class="px-6 py-16 text-center">
+                        <svg class="mx-auto w-10 h-10 text-slate-300 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/></svg>
+                        <p class="text-slate-400 text-sm">Nenhum cupom cadastrado.</p>
+                        <a href="{% url 'custom_admin:coupon_create' %}" class="mt-3 inline-flex text-brand-600 text-sm font-semibold hover:text-brand-700 transition-colors">+ Criar primeiro cupom</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
