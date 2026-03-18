@@ -82,7 +82,7 @@ def _save_product_relations(request, product):
 def dashboard(request):
     today = timezone.now().date()
     orders_today = OrderDraft.objects.filter(created_at__date=today).count()
-    total_revenue = OrderDraft.objects.aggregate(t=Sum('total_after_discount'))['t'] or 0
+    total_revenue = OrderDraft.objects.filter(status='enviado_whatsapp').aggregate(t=Sum('total_after_discount'))['t'] or 0
     active_products = Product.objects.filter(is_active=True).count()
     active_coupons = Coupon.objects.filter(active=True).count()
     recent_orders = OrderDraft.objects.select_related('coupon').order_by('-created_at')[:15]

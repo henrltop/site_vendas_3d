@@ -9,10 +9,21 @@ def checkout(request):
         return redirect('cart:cart_detail')
         
     if request.method == 'POST':
-        customer_name = request.POST.get('customer_name')
-        city = request.POST.get('city', '')
+        customer_name = request.POST.get('customer_name', '').strip()
+        phone = request.POST.get('phone', '').strip()
+        email = request.POST.get('email', '').strip()
+        address = request.POST.get('address', '').strip()
+        city = request.POST.get('city', '').strip()
         delivery_option = request.POST.get('delivery_option', '')
         notes = request.POST.get('notes', '')
+
+        if not customer_name or not phone or not address:
+            return render(request, 'orders/checkout.html', {
+                'cart': cart,
+                'error': 'Por favor, preencha nome, telefone e endereço.',
+                'form_data': request.POST,
+            })
+
         coupon = cart.get_coupon()
         discount_amount = cart.get_discount()
         total_after_discount = cart.get_total_after_discount()
@@ -30,6 +41,9 @@ def checkout(request):
         draft = OrderDraft.objects.create(
             user=request.user if request.user.is_authenticated else None,
             customer_name=customer_name,
+            phone=phone,
+            email=email,
+            address=address,
             city=city,
             delivery_option=delivery_option,
             notes=notes,
